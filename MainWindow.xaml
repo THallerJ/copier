@@ -5,19 +5,35 @@ c:\users\halle\documents\dotnet\copier\mainwindow.xaml
 mas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:userControls="clr-namespace:Copier.Views"
+        xmlns:views="clr-namespace:Copier.Views"
         mc:Ignorable="d"
         Title="Copier" Height="600" Width="1000">
-    <Border BorderThickness="20, 0, 20, 0" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
         <Grid>
-            <Grid.RowDefinitions >
-                <RowDefinition Height="75"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="3*" />
-            </Grid.RowDefinitions>
-            <userControls:HeaderPanel />
-            <userControls:SelectCopies Grid.Row="1"/>
-            <userControls:ViewCopies Grid.Row="2"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
+
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <views:SelectFolder DataContext="{Binding SelectFromFolderViewModel}" Title="Hello"/>
+                <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
+                <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectToFolderViewModel}" />
+            </Grid>
         </Grid>
-    </Border>
+        <views:ActionPanel Grid.Row="1"/>
+    </Grid>
 </Window>
