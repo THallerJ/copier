@@ -1,0 +1,23 @@
+﻿<Window x:Class="Copier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schec:\users\halle\documents\dotnet\copier\mainwindow.xaml.cs
+c:\users\halle\documents\dotnet\copier\mainwindow.xaml
+mas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:userControls="clr-namespace:Copier.Views"
+        mc:Ignorable="d"
+        Title="Copier" Height="600" Width="1000">
+    <Border BorderThickness="20, 0, 20, 0" >
+        <Grid>
+            <Grid.RowDefinitions >
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+            <userControls:HeaderPanel />
+            <userControls:SelectCopies Grid.Row="1"/>
+            <userControls:ViewCopies Grid.Row="2"/>
+        </Grid>
+    </Border>
+</Window>
