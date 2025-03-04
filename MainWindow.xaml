@@ -29,11 +29,11 @@ mas.microsoft.com/expression/blend/2008"
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <views:SelectFolder DataContext="{Binding SelectFromFolderViewModel}" Title="Hello"/>
+                <views:SelectFolder DataContext="{Binding SelectFromFolderViewModel}" />
                 <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
                 <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectToFolderViewModel}" />
             </Grid>
         </Grid>
-        <views:ActionPanel Grid.Row="1"/>
+        <views:ActionPanel Grid.Row="1" DataContext="{Binding ActionPanelViewModel}"/>
     </Grid>
 </Window>

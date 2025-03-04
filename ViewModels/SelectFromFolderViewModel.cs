@@ -1,4 +1,5 @@
-﻿using Copier.Interfaces;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Copier.Interfaces;
 
 namespace Copier.ViewModels
 {
@@ -6,7 +7,8 @@ namespace Copier.ViewModels
     {
         private string title = "Copy from...";
 
-        public SelectFromFolderViewModel(IFileManager fileManager) : base(fileManager) { }
+        public SelectFromFolderViewModel(IFileManager fileManager, ICopyManager copyManager, IMessenger messenger)
+            : base(fileManager, copyManager, messenger) { }
 
         public override string Title
         {
@@ -14,9 +16,9 @@ namespace Copier.ViewModels
             set => SetProperty(ref title, value);
         }
 
-        protected override void SaveCopyInfo()
+        protected override void SetPath(string path)
         {
-
+            CopyManager.FromPath = path;
         }
     }
 }

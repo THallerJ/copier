@@ -1,35 +1,48 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
-
 
 namespace Copier.ViewModels
 {
     public abstract class SelectFolderViewModel : ObservableObject
     {
-        public string buttonText = "*** SELECT FOLDER LOCATION ***";
+        protected string? currentPath;
         private ObservableCollection<string> files = [];
         protected readonly IFileManager FileManager;
+        protected readonly ICopyManager CopyManager;
+        protected readonly IMessenger Messenger;
+        private bool Result = false;
 
-        public SelectFolderViewModel(IFileManager fileManager)
+        public SelectFolderViewModel(IFileManager fileManager, ICopyManager copyManager, IMessenger messenger)
         {
             FileManager = fileManager;
+            CopyManager = copyManager;
+            Messenger = messenger; 
         }
 
         public void OpenDialog()
         {
             var folderDialog = new OpenFolderDialog();
             folderDialog.Multiselect = false;
-            var result = folderDialog.ShowDialog();
+            Result = folderDialog.ShowDialog() ?? false;
 
-            if (result == true)
+            if (Result)
             {
-                buttonText = folderDialog.FolderName;
-                SaveCopyInfo();
+                CurrentPath = folderDialog.FolderName;
+                if (CurrentPath != null) SetPath(CurrentPath);
+                UpdateFiles();
+            }
+        }
+
+        public void UpdateFiles()
+        {
+            if (Result && currentPath != null)
+            {
                 Files.Clear();
-                FileManager.FileMap(buttonText, (string file) => Files.Add(file));
+                FileManager.FileMap(currentPath, (string file) => Files.Add(file));
             }
         }
 
@@ -43,13 +56,13 @@ namespace Copier.ViewModels
             private set => SetProperty(ref files, value);
         }
 
-        public string? ButtonText
+        public string? CurrentPath
         {
-            get => buttonText;
-            private set => SetProperty(ref buttonText, value ?? string.Empty);
+            get => currentPath;
+            private set => SetProperty(ref currentPath, value);
         }
 
-        protected abstract void SaveCopyInfo();
+        protected abstract void SetPath(string path);
 
         public abstract string Title { get; set; }
     }

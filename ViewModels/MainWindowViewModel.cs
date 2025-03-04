@@ -2,19 +2,24 @@
 
 namespace Copier.ViewModels
 {
-    public partial class MainWindowViewModel :ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
         public SelectFromFolderViewModel selectFromFolderViewModel;
 
-
         [ObservableProperty]
         public SelectToFolderViewModel selectToFolderViewModel;
 
-        public MainWindowViewModel(SelectFromFolderViewModel _selectFromViewModel, SelectToFolderViewModel _selectToFolderView)
+        [ObservableProperty]
+        public ActionPanelViewModel actionPanelViewModel;
+
+        public MainWindowViewModel( SelectFromFolderViewModel _selectFromViewModel, 
+                SelectToFolderViewModel _selectToFolderView,
+                ActionPanelViewModel _actionPanelViewModel)
         {
             selectFromFolderViewModel = _selectFromViewModel;
             selectToFolderViewModel = _selectToFolderView;
+            actionPanelViewModel = _actionPanelViewModel;
         }
     }
 }

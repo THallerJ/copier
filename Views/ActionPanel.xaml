@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
             <Button Content="Save" HorizontalAlignment="Right" FontSize="20" Background="LightBlue" Width="200" FontWeight="Bold"/>
-            <Button Content="Run" Background="LightGreen" HorizontalAlignment="Right" FontSize="20" Grid.Column="1" Width="200" FontWeight="Bold"/>
+            <Button Content="Run" Command="{Binding CopyFilesCommand}" Background="LightGreen" HorizontalAlignment="Right" FontSize="20" Grid.Column="1" Width="200" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </UserControl>
