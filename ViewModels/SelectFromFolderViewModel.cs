@@ -7,8 +7,7 @@ namespace Copier.ViewModels
     {
         private string title = "Copy from...";
 
-        public SelectFromFolderViewModel(IFileManager fileManager, ICopyManager copyManager, IMessenger messenger)
-            : base(fileManager, copyManager, messenger) { }
+        public SelectFromFolderViewModel(IFileExplorer fileManager, IFileCopyManager fileCopyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, fileCopyManager, messenger,folderDialog) { }
 
         public override string Title
         {
@@ -16,9 +15,9 @@ namespace Copier.ViewModels
             set => SetProperty(ref title, value);
         }
 
-        protected override void SetPath(string path)
+        protected override void PathSelected(string path)
         {
-            CopyManager.FromPath = path;
+            FileCopyManager.SetFromPath(path);
         }
     }
 }

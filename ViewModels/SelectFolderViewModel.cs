@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
 
 namespace Copier.ViewModels
@@ -11,44 +10,44 @@ namespace Copier.ViewModels
     {
         protected string? currentPath;
         private ObservableCollection<string> files = [];
-        protected readonly IFileManager FileManager;
-        protected readonly ICopyManager CopyManager;
+        protected readonly IFileExplorer FileExplorer;
+        protected readonly IFileCopyManager FileCopyManager;
         protected readonly IMessenger Messenger;
+        private readonly IFolderDialog FolderDialog;
         private bool Result = false;
 
-        public SelectFolderViewModel(IFileManager fileManager, ICopyManager copyManager, IMessenger messenger)
+        public SelectFolderViewModel(IFileExplorer fileExplorer, IFileCopyManager fileCopyManager, IMessenger messenger, IFolderDialog folderDialog)
         {
-            FileManager = fileManager;
-            CopyManager = copyManager;
-            Messenger = messenger; 
+            FileExplorer = fileExplorer;
+            FileCopyManager = fileCopyManager;
+            Messenger = messenger;
+            FolderDialog = folderDialog;
         }
 
-        public void OpenDialog()
+        public void SelectFolder()
         {
-            var folderDialog = new OpenFolderDialog();
-            folderDialog.Multiselect = false;
-            Result = folderDialog.ShowDialog() ?? false;
+            Result = FolderDialog.SelectFolder();
 
             if (Result)
             {
-                CurrentPath = folderDialog.FolderName;
-                if (CurrentPath != null) SetPath(CurrentPath);
+                CurrentPath = FolderDialog.FolderName;
+                if (CurrentPath != null) PathSelected(CurrentPath);
                 UpdateFiles();
             }
         }
 
         public void UpdateFiles()
         {
-            if (Result && currentPath != null)
+            if (Result && CurrentPath != null)
             {
                 Files.Clear();
-                FileManager.FileMap(currentPath, (string file) => Files.Add(file));
+                FileExplorer.FileMap(CurrentPath, (string file) => Files.Add(file));
             }
         }
 
-        private RelayCommand? openDialogCommand;
+        private RelayCommand? selectFolderCommand;
 
-        public IRelayCommand OpenDialogCommand => openDialogCommand ??= new RelayCommand(OpenDialog);
+        public IRelayCommand SelectFolderCommand => selectFolderCommand ??= new RelayCommand(SelectFolder);
 
         public ObservableCollection<string> Files
         {
@@ -62,7 +61,7 @@ namespace Copier.ViewModels
             private set => SetProperty(ref currentPath, value);
         }
 
-        protected abstract void SetPath(string path);
+        protected abstract void PathSelected(string path);
 
         public abstract string Title { get; set; }
     }

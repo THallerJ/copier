@@ -13,13 +13,19 @@ namespace Copier.ViewModels
         [ObservableProperty]
         public ActionPanelViewModel actionPanelViewModel;
 
-        public MainWindowViewModel( SelectFromFolderViewModel _selectFromViewModel, 
-                SelectToFolderViewModel _selectToFolderView,
-                ActionPanelViewModel _actionPanelViewModel)
+        [ObservableProperty]
+        public SidebarViewModel sidebarViewModel;
+
+        [ObservableProperty]
+        public TopMenuViewModel topMenuViewModel;
+
+        public MainWindowViewModel(SelectFromFolderViewModel _selectFromViewModel, SelectToFolderViewModel _selectToFolderView, ActionPanelViewModel _actionPanelViewModel, SidebarViewModel _sidebarViewModel, TopMenuViewModel _topMenuViewModel)
         {
             selectFromFolderViewModel = _selectFromViewModel;
             selectToFolderViewModel = _selectToFolderView;
             actionPanelViewModel = _actionPanelViewModel;
+            sidebarViewModel = _sidebarViewModel;
+            topMenuViewModel = _topMenuViewModel;
         }
     }
 }

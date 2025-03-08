@@ -7,20 +7,30 @@ namespace Copier.ViewModels
 {
     public partial class ActionPanelViewModel
     {
-        private readonly ICopyManager CopyManager;
+        private readonly IFileCopyManager FileCopyManager;
         private readonly IMessenger Messenger;
+        private readonly IDialogFactory DialogFactory;
+        private readonly CopyJobDialogViewModel CopyJobDialogViewModel;
 
-        public ActionPanelViewModel(ICopyManager copyManager, IMessenger messenger)
+        public ActionPanelViewModel(IFileCopyManager fileCopyManager, IMessenger messenger, IDialogFactory dialogFactory, CopyJobDialogViewModel copyJobDialogViewModel)
         {
-            CopyManager = copyManager;
+            FileCopyManager = fileCopyManager;
             Messenger = messenger;
+            DialogFactory = dialogFactory;
+            CopyJobDialogViewModel = copyJobDialogViewModel;
         }
 
         [RelayCommand]
         public void CopyFiles()
         {
-            CopyManager.runCopy();
+            FileCopyManager.RunCopyJob();
             SendMessage();
+        }
+
+        [RelayCommand]
+        public void SaveCopyJob()
+        {
+            DialogFactory.ShowDialog(CopyJobDialogViewModel);
         }
 
         private void SendMessage()

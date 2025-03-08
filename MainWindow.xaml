@@ -7,18 +7,25 @@ mas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Copier.Views"
         mc:Ignorable="d"
-        Title="Copier" Height="600" Width="1000">
+        Title="Copier" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <Grid>
+
+        <views:TopMenu Grid.Row="0" DataContext="{Binding TopMenuViewModel}"/>
+
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
+
+            <views:Sidebar Grid.Column="0" DataContext="{Binding SidebarViewModel}"/>
 
             <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
 
@@ -34,6 +41,6 @@ mas.microsoft.com/expression/blend/2008"
                 <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectToFolderViewModel}" />
             </Grid>
         </Grid>
-        <views:ActionPanel Grid.Row="1" DataContext="{Binding ActionPanelViewModel}"/>
+        <views:ActionPanel Grid.Row="2" DataContext="{Binding ActionPanelViewModel}"/>
     </Grid>
 </Window>

@@ -1,6 +1,6 @@
 ﻿namespace Copier.Interfaces
 {
-    public interface IFileManager
+    public interface IFileExplorer
     {
         bool IsSkippableFile(string filePath);
 

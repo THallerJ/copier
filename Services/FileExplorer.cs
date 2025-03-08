@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Copier.Services
 {
-    public class FileManager : IFileManager
+    public class FileExplorer : IFileExplorer
     {
         public void FileMap(string folderPath, Action<string> process)
         {
@@ -19,6 +19,7 @@ namespace Copier.Services
                     process(filePath);
             }
         }
+
         public bool IsSkippableFile(string filePath)
         {
             var attributes = File.GetAttributes(filePath);
