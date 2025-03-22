@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Copier.Interfaces;
 using Copier.Models;
-using System.Diagnostics;
 using System.IO;
 
 namespace Copier.Services
@@ -28,15 +27,15 @@ namespace Copier.Services
 
         public void RunCopyJob()
         {
-            if (Job.Config.FromPath != null && Job.Config.ToPath != null)
-                RunCopyJob(Job.Config.FromPath, Job.Config.ToPath);
+            if (Job.Config.SrcPath != null && Job.Config.DestPath != null)
+                RunCopyJob(Job.Config.SrcPath, Job.Config.DestPath);
         }
 
-        public void RunCopyJob(string fromPath, string toPath)
+        public void RunCopyJob(string srcPath, string destPath)
         {
-            foreach (string filePath in Directory.GetFiles(fromPath))
+            foreach (string filePath in Directory.GetFiles(srcPath))
             {
-                string copiedFile = Path.Combine(toPath, Path.GetFileName(filePath));
+                string copiedFile = Path.Combine(destPath, Path.GetFileName(filePath));
 
                 if (!File.Exists(copiedFile))
                 {
@@ -44,9 +43,9 @@ namespace Copier.Services
                 }
             }
 
-            foreach (string dirPath in Directory.GetDirectories(fromPath))
+            foreach (string dirPath in Directory.GetDirectories(srcPath))
             {
-                string copiedDir = Path.Combine(toPath, Path.GetFileName(dirPath));
+                string copiedDir = Path.Combine(destPath, Path.GetFileName(dirPath));
                 Directory.CreateDirectory(copiedDir);
                 RunCopyJob(dirPath, copiedDir);
             }
@@ -54,7 +53,7 @@ namespace Copier.Services
 
         public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
         {
-            if (Job.Config.FromPath != null && Job.Config.ToPath != null && id.Length > 0)
+            if (Job.Config.SrcPath != null && Job.Config.DestPath != null && id.Length > 0)
             {
                 Job.Id = id;
                 return await JsonJobHandler.WriteAsync(CopyJobFileName, Job);
@@ -68,14 +67,14 @@ namespace Copier.Services
             throw new NotImplementedException();
         }
 
-        public void SetToPath(string path)
+        public void SetDestPath(string path)
         {
-            Job.Config.ToPath = path;
+            Job.Config.DestPath = path;
         }
 
-        public void SetFromPath(string path)
+        public void SetSrcPath(string path)
         {
-            Job.Config.FromPath = path;
+            Job.Config.SrcPath = path;
         }
     }
 }

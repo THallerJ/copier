@@ -5,10 +5,10 @@ namespace Copier.ViewModels
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        public SelectFromFolderViewModel selectFromFolderViewModel;
+        public SelectSrcFolderViewModel selectSrcFolderViewModel;
 
         [ObservableProperty]
-        public SelectToFolderViewModel selectToFolderViewModel;
+        public SelectDestFolderViewModel selectDestFolderViewModel;
 
         [ObservableProperty]
         public ActionPanelViewModel actionPanelViewModel;
@@ -19,10 +19,10 @@ namespace Copier.ViewModels
         [ObservableProperty]
         public TopMenuViewModel topMenuViewModel;
 
-        public MainWindowViewModel(SelectFromFolderViewModel _selectFromViewModel, SelectToFolderViewModel _selectToFolderView, ActionPanelViewModel _actionPanelViewModel, SidebarViewModel _sidebarViewModel, TopMenuViewModel _topMenuViewModel)
+        public MainWindowViewModel(SelectSrcFolderViewModel _selectSrcViewModel, SelectDestFolderViewModel _selectDestFolderView, ActionPanelViewModel _actionPanelViewModel, SidebarViewModel _sidebarViewModel, TopMenuViewModel _topMenuViewModel)
         {
-            selectFromFolderViewModel = _selectFromViewModel;
-            selectToFolderViewModel = _selectToFolderView;
+            selectSrcFolderViewModel = _selectSrcViewModel;
+            selectDestFolderViewModel = _selectDestFolderView;
             actionPanelViewModel = _actionPanelViewModel;
             sidebarViewModel = _sidebarViewModel;
             topMenuViewModel = _topMenuViewModel;

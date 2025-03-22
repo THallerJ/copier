@@ -36,9 +36,9 @@ mas.microsoft.com/expression/blend/2008"
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <views:SelectFolder DataContext="{Binding SelectFromFolderViewModel}" />
+                <views:SelectFolder DataContext="{Binding SelectSrcFolderViewModel}" />
                 <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
-                <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectToFolderViewModel}" />
+                <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectDestFolderViewModel}" />
             </Grid>
         </Grid>
         <views:ActionPanel Grid.Row="2" DataContext="{Binding ActionPanelViewModel}"/>

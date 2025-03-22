@@ -9,10 +9,10 @@ namespace Copier.Models
 
         public CopyJobConfig Config { get; }
 
-        public CopyJob(string id, string fromPath, string toPath)
+        public CopyJob(string id, string srcPath, string destPath)
         {
             Id = id;
-            Config = new CopyJobConfig(fromPath, toPath);
+            Config = new CopyJobConfig(srcPath, destPath);
         }
 
         public CopyJob() {

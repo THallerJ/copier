@@ -3,11 +3,11 @@ using Copier.Interfaces;
 
 namespace Copier.ViewModels
 {
-    public class SelectFromFolderViewModel : SelectFolderViewModel
+    public class SelectSrcFolderViewModel : SelectFolderViewModel
     {
         private string title = "Copy from...";
 
-        public SelectFromFolderViewModel(IFileExplorer fileManager, IFileCopyManager fileCopyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, fileCopyManager, messenger,folderDialog) { }
+        public SelectSrcFolderViewModel(IFileExplorer fileManager, IFileCopyManager fileCopyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, fileCopyManager, messenger,folderDialog) { }
 
         public override string Title
         {
@@ -17,7 +17,7 @@ namespace Copier.ViewModels
 
         protected override void PathSelected(string path)
         {
-            FileCopyManager.SetFromPath(path);
+            FileCopyManager.SetSrcPath(path);
         }
     }
 }

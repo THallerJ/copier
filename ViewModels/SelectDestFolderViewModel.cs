@@ -4,11 +4,11 @@ using Copier.Models;
 
 namespace Copier.ViewModels
 {
-    public class SelectToFolderViewModel : SelectFolderViewModel
+    public class SelectDestFolderViewModel : SelectFolderViewModel
     {
         private string title = "Copy to...";
 
-        public SelectToFolderViewModel(IFileExplorer fileManager, IFileCopyManager copyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, copyManager, messenger, folderDialog)
+        public SelectDestFolderViewModel(IFileExplorer fileManager, IFileCopyManager copyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, copyManager, messenger, folderDialog)
         {
             InitMessenger();
         }
@@ -21,12 +21,12 @@ namespace Copier.ViewModels
 
         protected override void PathSelected(string path)
         {
-            FileCopyManager.SetToPath(path);
+            FileCopyManager.SetDestPath(path);
         }
 
         private void InitMessenger()
         {
-            Messenger.Register<SelectToFolderViewModel, FilesCopiedMessage>(this, (recipient, val) =>
+            Messenger.Register<SelectDestFolderViewModel, FilesCopiedMessage>(this, (recipient, val) =>
             {
                 recipient.MessageReceived();
             });
