@@ -2,22 +2,23 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
 using Copier.Models;
-using System.Diagnostics;
 
 namespace Copier.ViewModels
 {
     public partial class SidebarViewModel : ObservableObject
     {
         private readonly IMessenger Messenger;
+        private readonly IFileCopyManager FileCopyManager;
 
         [ObservableProperty]
         public List<IJob<CopyJobConfig>> jobs = [];
 
-        public SidebarViewModel(IMessenger messenger)
+        public SidebarViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             Messenger = messenger;
+            FileCopyManager = fileCopyManager;
+            Jobs = FileCopyManager.CopyJobs;
             InitMessenger();
-            Debug.WriteLine(Jobs.Count);
         }
 
         private void InitMessenger()

@@ -6,6 +6,8 @@ namespace Copier.Interfaces
     {
         public CopyJob Job { get; }
 
+        public List<IJob<CopyJobConfig>> CopyJobs { get; }
+
         public void RunCopyJob();
 
         public void RunCopyJob(string fromPath, string toPath);
