@@ -1,4 +1,5 @@
-﻿using Copier.Interfaces;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Copier.Interfaces;
 using Copier.ViewModels;
 using Copier.Views;
 using System.Windows;
@@ -8,17 +9,19 @@ namespace Copier.Factories
     public class DialogFactory : IDialogFactory
     {
         private readonly IFileCopyManager FileCopyManager;
+        private readonly IMessenger Messenger;
 
-        public DialogFactory(IFileCopyManager fileCopyManager)
+        public DialogFactory(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
-            FileCopyManager = fileCopyManager; 
+            FileCopyManager = fileCopyManager;
+            Messenger = messenger;
         }
 
         public bool? ShowDialog(ISubmittableDialog T)
         {
             if (T.GetType() == typeof(CopyJobDialogViewModel))
             {
-                var vm = new CopyJobDialogViewModel(FileCopyManager);
+                var vm = new CopyJobDialogViewModel(FileCopyManager, Messenger);
                 var dialog = new CopyJobDialog(vm);
                 InitCloseable(dialog, vm);
                 return dialog.ShowDialog();

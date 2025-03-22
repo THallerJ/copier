@@ -14,7 +14,6 @@ namespace Copier.ViewModels
         protected readonly IFileCopyManager FileCopyManager;
         protected readonly IMessenger Messenger;
         private readonly IFolderDialog FolderDialog;
-        private bool Result = false;
 
         public SelectFolderViewModel(IFileExplorer fileExplorer, IFileCopyManager fileCopyManager, IMessenger messenger, IFolderDialog folderDialog)
         {
@@ -26,23 +25,29 @@ namespace Copier.ViewModels
 
         public void SelectFolder()
         {
-            Result = FolderDialog.SelectFolder();
+            var result = FolderDialog.SelectFolder();
 
-            if (Result)
+            if (result)
             {
                 CurrentPath = FolderDialog.FolderName;
                 if (CurrentPath != null) PathSelected(CurrentPath);
-                UpdateFiles();
+                if (result) UpdateFiles();
             }
         }
 
         public void UpdateFiles()
         {
-            if (Result && CurrentPath != null)
+            if (CurrentPath != null)
             {
                 Files.Clear();
                 FileExplorer.FileMap(CurrentPath, (string file) => Files.Add(file));
             }
+        }
+
+        public void UpdateFiles(string path)
+        {
+            CurrentPath = path;
+            UpdateFiles();
         }
 
         private RelayCommand? selectFolderCommand;
@@ -58,7 +63,7 @@ namespace Copier.ViewModels
         public string? CurrentPath
         {
             get => currentPath;
-            private set => SetProperty(ref currentPath, value);
+            set => SetProperty(ref currentPath, value);
         }
 
         protected abstract void PathSelected(string path);

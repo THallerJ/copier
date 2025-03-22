@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
+using Copier.Models;
 
 namespace Copier.ViewModels
 {
@@ -8,16 +10,19 @@ namespace Copier.ViewModels
         public event EventHandler? OnCancel;
         public event EventHandler? OnOk;
         private readonly IFileCopyManager FileCopyManager;
+        private readonly IMessenger Messenger;
 
-        public CopyJobDialogViewModel(IFileCopyManager fileCopyManager)
+        public CopyJobDialogViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             FileCopyManager = fileCopyManager;
+            Messenger = messenger;
         }
 
         [RelayCommand]
         public async Task Save(string name)
         {
-            await FileCopyManager.SaveCopyJobAsync(name);
+            var jobs = await FileCopyManager.SaveCopyJobAsync(name);
+            SendCopyJobSavedMessage(jobs);
             OnOk?.Invoke(this, EventArgs.Empty);
         }
 
@@ -25,6 +30,11 @@ namespace Copier.ViewModels
         public void Cancel()
         {
             OnCancel?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SendCopyJobSavedMessage(List<IJob<CopyJobConfig>> jobs)
+        {
+            Messenger.Send(new CopyJobSavedMessage(jobs));
         }
     }
 }

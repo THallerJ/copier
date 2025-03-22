@@ -24,7 +24,7 @@ namespace Copier.ViewModels
         public void CopyFiles()
         {
             FileCopyManager.RunCopyJob();
-            SendMessage();
+            SendFilesCopiedMessage();
         }
 
         [RelayCommand]
@@ -33,7 +33,7 @@ namespace Copier.ViewModels
             DialogFactory.ShowDialog(CopyJobDialogViewModel);
         }
 
-        private void SendMessage()
+        private void SendFilesCopiedMessage()
         {
             Messenger.Send(new FilesCopiedMessage());
         }

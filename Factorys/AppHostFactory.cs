@@ -22,10 +22,10 @@ namespace Copier.Factorys
                 services.AddSingleton(s => CreateDialogFactory(s));
                 services.AddSingleton(s => CreateFileCopyManager(s));
                 services.AddSingleton(s => CreateMainWindowViewModel(s));
-                services.AddTransient(s => CreateSelectFromFolderViewModel(s));
+                services.AddTransient(s => CreateSelectSrcFolderViewModel(s));
                 services.AddTransient(s => CreateSelectToFolderViewModel(s));
                 services.AddTransient(s => CreateActionPanelViewModel(s));
-                services.AddTransient(s => CreateSidebarViewModel(s));
+                services.AddTransient(s => CreateSavedJobsViewModel(s));
                 services.AddTransient(s => CreateCopyJobDialogViewModel(s));
                 services.AddTransient(s => CreateTopMenuViewModel(s));
             }).Build();
@@ -33,22 +33,22 @@ namespace Copier.Factorys
 
         private static IFileCopyManager CreateFileCopyManager(IServiceProvider services)
         {
-            var jsonWriter = services.GetService<IJsonJobFileHandler>();
+            var jsonJobFileHandler = services.GetService<IJsonJobFileHandler>();
 
-            if (jsonWriter == null)
+            if (jsonJobFileHandler == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new FileCopyManager(jsonWriter);
+            return FileCopyManager.Create(jsonJobFileHandler);
         }
 
         private static MainWindowViewModel CreateMainWindowViewModel(IServiceProvider services)
         {
-            var selectFromViewModel = services.GetService<SelectFromFolderViewModel>();
-            var selectToFolderViewModel = services.GetService<SelectToFolderViewModel>();
+            var selectFromViewModel = services.GetService<SelectSrcFolderViewModel>();
+            var selectToFolderViewModel = services.GetService<SelectDestFolderViewModel>();
             var actionPanelViewModel = services.GetService<ActionPanelViewModel>();
-            var sidebarViewModel = services.GetService<SidebarViewModel>();
+            var sidebarViewModel = services.GetService<SavedJobsViewModel>();
             var topMenuViewModel = services.GetService<TopMenuViewModel>();
 
             if (selectFromViewModel == null || selectToFolderViewModel == null || actionPanelViewModel == null || sidebarViewModel == null || topMenuViewModel == null)
@@ -59,7 +59,7 @@ namespace Copier.Factorys
             return new MainWindowViewModel(selectFromViewModel, selectToFolderViewModel, actionPanelViewModel, sidebarViewModel, topMenuViewModel);
         }
 
-        private static SelectFromFolderViewModel CreateSelectFromFolderViewModel(IServiceProvider services)
+        private static SelectSrcFolderViewModel CreateSelectSrcFolderViewModel(IServiceProvider services)
         {
             var fileExplorer = services.GetService<IFileExplorer>();
             var fileCopyManager = services.GetService<IFileCopyManager>();
@@ -71,10 +71,10 @@ namespace Copier.Factorys
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new SelectFromFolderViewModel(fileExplorer, fileCopyManager, messenger, folderDialog);
+            return new SelectSrcFolderViewModel(fileExplorer, fileCopyManager, messenger, folderDialog);
         }
 
-        private static SelectToFolderViewModel CreateSelectToFolderViewModel(IServiceProvider services)
+        private static SelectDestFolderViewModel CreateSelectToFolderViewModel(IServiceProvider services)
         {
             var fileExplorer = services.GetService<IFileExplorer>();
             var fileCopyManager = services.GetService<IFileCopyManager>();
@@ -86,7 +86,7 @@ namespace Copier.Factorys
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new SelectToFolderViewModel(fileExplorer, fileCopyManager, messenger, folderDialog);
+            return new SelectDestFolderViewModel(fileExplorer, fileCopyManager, messenger, folderDialog);
         }
 
         private static ActionPanelViewModel CreateActionPanelViewModel(IServiceProvider services)
@@ -105,33 +105,44 @@ namespace Copier.Factorys
             return new ActionPanelViewModel(fileExplorer, messenger, dialogFactory, copyJobDialogViewModel);
         }
 
-        private static SidebarViewModel CreateSidebarViewModel(IServiceProvider services)
+        private static SavedJobsViewModel CreateSavedJobsViewModel(IServiceProvider services)
         {
-            return new SidebarViewModel();
+            var messenger = services.GetService<IMessenger>();
+            var fileCopyManager = services.GetService<IFileCopyManager>();
+
+            if (messenger == null || fileCopyManager == null)
+            {
+                throw new InvalidOperationException("Required services are not registered.");
+            }
+
+            return new SavedJobsViewModel(fileCopyManager, messenger);
         }
 
         private static CopyJobDialogViewModel CreateCopyJobDialogViewModel(IServiceProvider services)
         {
             var fileCopyManager = services.GetService<IFileCopyManager>();
+            var messenger = services.GetService<IMessenger>();
 
-            if (fileCopyManager == null)
+
+            if (fileCopyManager == null || messenger == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new CopyJobDialogViewModel(fileCopyManager);
+            return new CopyJobDialogViewModel(fileCopyManager, messenger);
         }
 
         private static IDialogFactory CreateDialogFactory(IServiceProvider services)
         {
             var fileCopyManager = services.GetService<IFileCopyManager>();
+            var messenger = services.GetService<IMessenger>();
 
-            if (fileCopyManager == null)
+            if (fileCopyManager == null || messenger == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new DialogFactory(fileCopyManager);
+            return new DialogFactory(fileCopyManager, messenger);
         }
 
         private static TopMenuViewModel CreateTopMenuViewModel(IServiceProvider services)

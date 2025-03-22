@@ -7,27 +7,35 @@ namespace Copier.Services
 {
     public partial class FileCopyManager : ObservableObject, IFileCopyManager
     {
-        private readonly IJsonJobFileHandler JsonJobHandler;
+        private readonly IJsonJobFileHandler JsonJobFileHandler;
         private static readonly string CopyJobFileName = "copy_jobs";
 
-        public FileCopyManager(IJsonJobFileHandler jsonJobHandler)
+        public List<IJob<CopyJobConfig>> CopyJobs { get; private set; }
+        public CopyJob Job { get; set; } = new();
+
+        private FileCopyManager(IJsonJobFileHandler jsonJobFileHandler, List<IJob<CopyJobConfig>> initialCopyJobs)
         {
-            JsonJobHandler = jsonJobHandler;
+            JsonJobFileHandler = jsonJobFileHandler;
+            CopyJobs = initialCopyJobs;
         }
 
-        public CopyJob Job { get; } = new();
+        public static IFileCopyManager Create(IJsonJobFileHandler jsonJobHandler)
+        {
+            var initialCopyJobs = jsonJobHandler.Read<CopyJobConfig>(CopyJobFileName);
+            return new FileCopyManager(jsonJobHandler, initialCopyJobs);
+        }
 
         public void RunCopyJob()
         {
-            if (Job.Config.FromPath != null && Job.Config.ToPath != null)
-                RunCopyJob(Job.Config.FromPath, Job.Config.ToPath);
+            if (Job.Config.Src != null && Job.Config.Dest != null)
+                RunCopyJob(Job.Config.Src, Job.Config.Dest);
         }
 
-        public void RunCopyJob(string fromPath, string toPath)
+        public void RunCopyJob(string srcPath, string destPath)
         {
-            foreach (string filePath in Directory.GetFiles(fromPath))
+            foreach (string filePath in Directory.GetFiles(srcPath))
             {
-                string copiedFile = Path.Combine(toPath, Path.GetFileName(filePath));
+                string copiedFile = Path.Combine(destPath, Path.GetFileName(filePath));
 
                 if (!File.Exists(copiedFile))
                 {
@@ -35,36 +43,39 @@ namespace Copier.Services
                 }
             }
 
-            foreach (string dirPath in Directory.GetDirectories(fromPath))
+            foreach (string dirPath in Directory.GetDirectories(srcPath))
             {
-                string copiedDir = Path.Combine(toPath, Path.GetFileName(dirPath));
+                string copiedDir = Path.Combine(destPath, Path.GetFileName(dirPath));
                 Directory.CreateDirectory(copiedDir);
                 RunCopyJob(dirPath, copiedDir);
             }
         }
 
-        public async Task SaveCopyJobAsync(string id)
+        public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
         {
-            if (Job.Config.FromPath != null && Job.Config.ToPath != null && id.Length > 0)
+            if (Job.Config.Src != null && Job.Config.Dest != null && id.Length > 0)
             {
                 Job.Id = id;
-                await JsonJobHandler.WriteAsync(CopyJobFileName, Job);
+                return await JsonJobFileHandler.WriteAsync(CopyJobFileName, Job);
             }
+
+            return [];
          }
 
-        public Task GetCopyJobAsync(string name)
+        public void SetDestination(string path)
         {
-            throw new NotImplementedException();
+            Job.Config.Dest = path;
         }
 
-        public void SetToPath(string path)
+        public void SetSource(string path)
         {
-            Job.Config.ToPath = path;
+            Job.Config.Src = path;
         }
 
-        public void SetFromPath(string path)
+        public async Task<List<IJob<CopyJobConfig>>> DeleteJobAsync(string id)
         {
-            Job.Config.FromPath = path;
+            CopyJobs = await JsonJobFileHandler.DeleteAsync<CopyJobConfig>(CopyJobFileName, id);
+            return CopyJobs;
         }
     }
 }

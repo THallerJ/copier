@@ -17,25 +17,51 @@ namespace Copier.Services
             }
         };
 
+        private static string GetPath(string filename)
+        {
+            return Path.Combine(DefaultPath, $"{filename}.json");
+        }
+
         public async Task<List<IJob<T>>> ReadAsync<T>(string filename)
+        {
+            return await ReadInternalAsync<T>(filename, true);
+        }
+
+        public List<IJob<T>> Read<T>(string filename)
+        {
+            return ReadInternalAsync<T>(filename, false).GetAwaiter().GetResult();
+        }
+
+
+        private async Task<List<IJob<T>>> ReadInternalAsync<T>(string filename, bool isAsync)
         {
             string path = GetPath(filename);
 
             var list = new List<IJob<T>>();
 
+            string fileJson;
             if (File.Exists(path))
             {
-                var fileJson = await File.ReadAllTextAsync(path);
-                return list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                if (isAsync)
+                {
+                    fileJson = await File.ReadAllTextAsync(path);
+                }
+                else
+                {
+                    fileJson = File.ReadAllText(path);
+                }
+
+                if (!string.IsNullOrWhiteSpace(fileJson))
+                {
+                    list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                }
             }
 
-            return [];
+            return list;
         }
 
-        public async Task WriteAsync<T>(string filename, IJob<T> data)
+        public async Task<List<IJob<T>>> WriteAsync<T>(string filename, IJob<T> data)
         {
-            if (data.Id == null) return;
-
             if (Directory.Exists(DefaultPath) == false)
             {
                 Directory.CreateDirectory(DefaultPath);
@@ -45,11 +71,16 @@ namespace Copier.Services
 
             var list = await ReadAsync<T>(filename);
 
-            if (list.Any(item => item.Id == data.Id)) return;
+            if (data.Id == null || list.Any(item => item.Id == data.Id))
+            {
+                return list;
+            }
 
             list.Add(data);
             var json = JsonSerializer.Serialize(list, Options);
             await File.WriteAllTextAsync(path, json);
+
+            return list;
         }
 
         public void DeleteAllData()
@@ -57,9 +88,22 @@ namespace Copier.Services
             Directory.Delete(DefaultPath, true);
         }
 
-        private static string GetPath(string filename)
+        public async Task<List<IJob<T>>> DeleteAsync<T>(string filename, string id)
         {
-            return Path.Combine(DefaultPath, $"{filename}.json");
+            var path = GetPath(filename);
+            if (File.Exists(path) == false) return [];
+
+            var list = await ReadAsync<T>(filename);
+            var job = list.FirstOrDefault(item => item.Id == item.Id);
+
+            if (job != null)
+            {
+                list.Remove(job);
+                var json = JsonSerializer.Serialize(list, Options);
+                await File.WriteAllTextAsync(path, json);
+            }
+
+            return list;
         }
     }
 }
