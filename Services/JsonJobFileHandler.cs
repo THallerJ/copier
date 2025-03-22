@@ -19,17 +19,36 @@ namespace Copier.Services
 
         public async Task<List<IJob<T>>> ReadAsync<T>(string filename)
         {
+            return await ReadInternalAsync<T>(filename, true);
+        }
+
+        public List<IJob<T>> Read<T>(string filename)
+        {
+            return ReadInternalAsync<T>(filename, false).GetAwaiter().GetResult();
+        }
+
+
+        private async Task<List<IJob<T>>> ReadInternalAsync<T>(string filename, bool isAsync)
+        {
             string path = GetPath(filename);
 
             var list = new List<IJob<T>>();
 
             if (File.Exists(path))
             {
-                var fileJson = await File.ReadAllTextAsync(path);
-                return list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                if (isAsync)
+                {
+                    var fileJson = await File.ReadAllTextAsync(path);
+                    list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                }
+                else
+                {
+                    var fileJson = File.ReadAllText(path);
+                    list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                }
             }
 
-            return [];
+            return list;
         }
 
         public async Task<List<IJob<T>>> WriteAsync<T>(string filename, IJob<T> data)

@@ -1,18 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Copier.Interfaces;
 using Copier.Models;
 using System.Diagnostics;
 
 namespace Copier.ViewModels
 {
-    public class SidebarViewModel : ObservableObject
+    public partial class SidebarViewModel : ObservableObject
     {
         private readonly IMessenger Messenger;
+
+        [ObservableProperty]
+        public List<IJob<CopyJobConfig>> jobs = [];
 
         public SidebarViewModel(IMessenger messenger)
         {
             Messenger = messenger;
             InitMessenger();
+            Debug.WriteLine(Jobs.Count);
         }
 
         private void InitMessenger()
@@ -25,8 +30,7 @@ namespace Copier.ViewModels
 
         private void MessageReceived(CopyJobSavedMessage message)
         {
-            Debug.WriteLine("SIDEBAR RECEIVED");
-            Debug.WriteLine(message.Value.Count);
+            Jobs = message.Value;
         }
     }
 }

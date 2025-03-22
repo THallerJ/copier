@@ -6,6 +6,8 @@
 
         Task<List<IJob<T>>> ReadAsync<T>(string filename);
 
+        List<IJob<T>> Read<T>(string filenamec);
+
         void DeleteAllData();
     }
 }

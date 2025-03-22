@@ -10,12 +10,20 @@ namespace Copier.Services
         private readonly IJsonJobFileHandler JsonJobHandler;
         private static readonly string CopyJobFileName = "copy_jobs";
 
-        public FileCopyManager(IJsonJobFileHandler jsonJobHandler)
+        public List<IJob<CopyJobConfig>> CopyJobs { get; private set; }
+        public CopyJob Job { get; } = new();
+
+        private FileCopyManager(IJsonJobFileHandler jsonJobHandler, List<IJob<CopyJobConfig>> initialCopyJobs)
         {
             JsonJobHandler = jsonJobHandler;
+            CopyJobs = initialCopyJobs;
         }
 
-        public CopyJob Job { get; } = new();
+        public static IFileCopyManager Create(IJsonJobFileHandler jsonJobHandler)
+        {
+            var initialCopyJobs = jsonJobHandler.Read<CopyJobConfig>(CopyJobFileName);
+            return new FileCopyManager(jsonJobHandler, initialCopyJobs);
+        }
 
         public void RunCopyJob()
         {

@@ -33,14 +33,14 @@ namespace Copier.Factorys
 
         private static IFileCopyManager CreateFileCopyManager(IServiceProvider services)
         {
-            var jsonWriter = services.GetService<IJsonJobFileHandler>();
+            var jsonJobFileHandler = services.GetService<IJsonJobFileHandler>();
 
-            if (jsonWriter == null)
+            if (jsonJobFileHandler == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new FileCopyManager(jsonWriter);
+            return FileCopyManager.Create(jsonJobFileHandler);
         }
 
         private static MainWindowViewModel CreateMainWindowViewModel(IServiceProvider services)
