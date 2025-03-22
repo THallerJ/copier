@@ -23,19 +23,4 @@ namespace Copier.Models
         public string JobType => "CopyJob";
 
     }
-
-    public class CopyJobConfig
-    {
-        public CopyJobConfig(string? fromPath, string? toPath)
-        {
-            FromPath = fromPath;
-            ToPath = toPath;
-        }
-
-        public CopyJobConfig() { }
-
-        public string? FromPath { get; set; }
-
-        public string? ToPath { get; set; }
-    }
 }

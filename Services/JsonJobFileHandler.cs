@@ -32,10 +32,8 @@ namespace Copier.Services
             return [];
         }
 
-        public async Task WriteAsync<T>(string filename, IJob<T> data)
+        public async Task<List<IJob<T>>> WriteAsync<T>(string filename, IJob<T> data)
         {
-            if (data.Id == null) return;
-
             if (Directory.Exists(DefaultPath) == false)
             {
                 Directory.CreateDirectory(DefaultPath);
@@ -45,11 +43,16 @@ namespace Copier.Services
 
             var list = await ReadAsync<T>(filename);
 
-            if (list.Any(item => item.Id == data.Id)) return;
+            if (data.Id == null || list.Any(item => item.Id == data.Id))
+            {
+                return list;
+            }
 
             list.Add(data);
             var json = JsonSerializer.Serialize(list, Options);
             await File.WriteAllTextAsync(path, json);
+
+            return list;
         }
 
         public void DeleteAllData()

@@ -107,31 +107,41 @@ namespace Copier.Factorys
 
         private static SidebarViewModel CreateSidebarViewModel(IServiceProvider services)
         {
-            return new SidebarViewModel();
+            var messenger = services.GetService<IMessenger>();
+
+            if (messenger == null)
+            {
+                throw new InvalidOperationException("Required services are not registered.");
+            }
+
+            return new SidebarViewModel(messenger);
         }
 
         private static CopyJobDialogViewModel CreateCopyJobDialogViewModel(IServiceProvider services)
         {
             var fileCopyManager = services.GetService<IFileCopyManager>();
+            var messenger = services.GetService<IMessenger>();
 
-            if (fileCopyManager == null)
+
+            if (fileCopyManager == null || messenger == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new CopyJobDialogViewModel(fileCopyManager);
+            return new CopyJobDialogViewModel(fileCopyManager, messenger);
         }
 
         private static IDialogFactory CreateDialogFactory(IServiceProvider services)
         {
             var fileCopyManager = services.GetService<IFileCopyManager>();
+            var messenger = services.GetService<IMessenger>();
 
-            if (fileCopyManager == null)
+            if (fileCopyManager == null || messenger == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new DialogFactory(fileCopyManager);
+            return new DialogFactory(fileCopyManager, messenger);
         }
 
         private static TopMenuViewModel CreateTopMenuViewModel(IServiceProvider services)

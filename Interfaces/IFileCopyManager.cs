@@ -10,7 +10,7 @@ namespace Copier.Interfaces
 
         public void RunCopyJob(string fromPath, string toPath);
 
-        public Task SaveCopyJobAsync(string name);
+        public Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string name);
 
         public Task GetCopyJobAsync(string name);
 

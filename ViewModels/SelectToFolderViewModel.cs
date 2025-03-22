@@ -10,7 +10,7 @@ namespace Copier.ViewModels
 
         public SelectToFolderViewModel(IFileExplorer fileManager, IFileCopyManager copyManager, IMessenger messenger, IFolderDialog folderDialog): base(fileManager, copyManager, messenger, folderDialog)
         {
-            initMessenger();
+            InitMessenger();
         }
 
         public override string Title
@@ -24,7 +24,7 @@ namespace Copier.ViewModels
             FileCopyManager.SetToPath(path);
         }
 
-        private void initMessenger()
+        private void InitMessenger()
         {
             Messenger.Register<SelectToFolderViewModel, FilesCopiedMessage>(this, (recipient, val) =>
             {

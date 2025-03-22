@@ -43,13 +43,15 @@ namespace Copier.Services
             }
         }
 
-        public async Task SaveCopyJobAsync(string id)
+        public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
         {
             if (Job.Config.FromPath != null && Job.Config.ToPath != null && id.Length > 0)
             {
                 Job.Id = id;
-                await JsonJobHandler.WriteAsync(CopyJobFileName, Job);
+                return await JsonJobHandler.WriteAsync(CopyJobFileName, Job);
             }
+
+            return [];
          }
 
         public Task GetCopyJobAsync(string name)
