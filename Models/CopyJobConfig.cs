@@ -2,16 +2,16 @@
 {
     public class CopyJobConfig
     {
-        public CopyJobConfig(string? srcPath, string? destPath)
+        public CopyJobConfig(string? src, string? dest)
         {
-            SrcPath = srcPath;
-            DestPath = destPath;
+            Src = src;
+            Dest = dest;
         }
 
         public CopyJobConfig() { }
 
-        public string? SrcPath { get; set; }
+        public string? Src { get; set; }
 
-        public string? DestPath { get; set; }
+        public string? Dest { get; set; }
     }
 }

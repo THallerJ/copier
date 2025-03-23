@@ -16,8 +16,8 @@ namespace Copier.Interfaces
 
         public Task GetCopyJobAsync(string name);
 
-        public void SetDestPath(string path);
+        public void SetDestination(string path);
 
-        public void SetSrcPath(string path);
+        public void SetSource(string path);
     }
 }

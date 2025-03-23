@@ -21,7 +21,7 @@ namespace Copier.ViewModels
 
         protected override void PathSelected(string path)
         {
-            FileCopyManager.SetDestPath(path);
+            FileCopyManager.SetDestination(path);
         }
 
         private void InitMessenger()

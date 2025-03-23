@@ -17,7 +17,7 @@ namespace Copier.ViewModels
 
         protected override void PathSelected(string path)
         {
-            FileCopyManager.SetSrcPath(path);
+            FileCopyManager.SetSource(path);
         }
     }
 }

@@ -27,8 +27,8 @@ namespace Copier.Services
 
         public void RunCopyJob()
         {
-            if (Job.Config.SrcPath != null && Job.Config.DestPath != null)
-                RunCopyJob(Job.Config.SrcPath, Job.Config.DestPath);
+            if (Job.Config.Src != null && Job.Config.Dest != null)
+                RunCopyJob(Job.Config.Src, Job.Config.Dest);
         }
 
         public void RunCopyJob(string srcPath, string destPath)
@@ -53,7 +53,7 @@ namespace Copier.Services
 
         public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
         {
-            if (Job.Config.SrcPath != null && Job.Config.DestPath != null && id.Length > 0)
+            if (Job.Config.Src != null && Job.Config.Dest != null && id.Length > 0)
             {
                 Job.Id = id;
                 return await JsonJobHandler.WriteAsync(CopyJobFileName, Job);
@@ -67,14 +67,14 @@ namespace Copier.Services
             throw new NotImplementedException();
         }
 
-        public void SetDestPath(string path)
+        public void SetDestination(string path)
         {
-            Job.Config.DestPath = path;
+            Job.Config.Dest = path;
         }
 
-        public void SetSrcPath(string path)
+        public void SetSource(string path)
         {
-            Job.Config.SrcPath = path;
+            Job.Config.Src = path;
         }
     }
 }
