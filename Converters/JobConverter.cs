@@ -20,25 +20,9 @@ namespace Copier.Converters
                     throw new JsonException("JobType property is null");
                 }
 
-                Type concreteType = jobType switch
-                {
-                    "CopyJob" => typeof(CopyJob),
-                    _ => throw new NotSupportedException($"Job type '{jobType}' is not supported")
-                };
+                Type concreteType = GetConcreteType(jobType);
+                var deserializedObject = DeserializeJob(root, concreteType, options);
 
-                var deserializedObject = JsonSerializer.Deserialize(root.GetRawText(), concreteType, options);
-                if (deserializedObject is CopyJob copyJob)
-                {
-                    if (root.TryGetProperty("Config", out JsonElement configElement))
-                    {
-                        var config = JsonSerializer.Deserialize<CopyJobConfig>(configElement.GetRawText(), options);
-                        if (config != null)
-                        {
-                            copyJob.Config.Src = config.Src;
-                            copyJob.Config.Dest = config.Dest;
-                        }
-                    }
-                }
                 if (deserializedObject == null)
                 {
                     throw new JsonException($"Deserialization returned null for job type '{jobType}'");
@@ -53,6 +37,37 @@ namespace Copier.Converters
         public override void Write(Utf8JsonWriter writer, IJob<T> value, JsonSerializerOptions options)
         {
             JsonSerializer.Serialize(writer, value, value.GetType(), options);
+        }
+
+        private static Type GetConcreteType(string jobType)
+        {
+            return jobType switch
+            {
+                "CopyJob" => typeof(CopyJob),
+                _ => throw new NotSupportedException($"Job type '{jobType}' is not supported")
+            };
+        }
+
+        private static object? DeserializeJob(JsonElement root, Type concreteType, JsonSerializerOptions options)
+        {
+            var deserializedObject = JsonSerializer.Deserialize(root.GetRawText(), concreteType, options);
+
+            switch (deserializedObject)
+            {
+                case CopyJob copyJob:
+                    if (root.TryGetProperty("Config", out JsonElement configElement))
+                    {
+                        var config = JsonSerializer.Deserialize<CopyJobConfig>(configElement.GetRawText(), options);
+                        if (config != null)
+                        {
+                            copyJob.Config.Src = config.Src;
+                            copyJob.Config.Dest = config.Dest;
+                        }
+                    }
+                    return deserializedObject;
+                default:
+                    throw new NotSupportedException($"Job type '{concreteType.Name}' is not supported");
+            }
         }
     }
 }
