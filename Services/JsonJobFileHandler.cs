@@ -34,16 +34,20 @@ namespace Copier.Services
 
             var list = new List<IJob<T>>();
 
+            string fileJson;
             if (File.Exists(path))
             {
                 if (isAsync)
                 {
-                    var fileJson = await File.ReadAllTextAsync(path);
-                    list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
+                    fileJson = await File.ReadAllTextAsync(path);
                 }
                 else
                 {
-                    var fileJson = File.ReadAllText(path);
+                    fileJson = File.ReadAllText(path);
+                }
+
+                if (!string.IsNullOrWhiteSpace(fileJson))
+                {
                     list = JsonSerializer.Deserialize<List<IJob<T>>>(fileJson, Options) ?? new List<IJob<T>>();
                 }
             }
