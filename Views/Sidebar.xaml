@@ -6,12 +6,26 @@
              xmlns:local="clr-namespace:Copier.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="IsHitTestVisible" Value="False"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Saved Jobs" FontSize="15" VerticalAlignment="Center" Margin="5 0 0 0" FontWeight="SemiBold"/>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Jobs}" DisplayMemberPath="Id" Margin="0 0 0 0"/>
+        
+        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" />
+        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="100"/>
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="200"/>
+                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="200"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
