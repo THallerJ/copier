@@ -7,6 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Sidebar" FontSize="30"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Saved Jobs" FontSize="15" VerticalAlignment="Center" Margin="5 0 0 0" FontWeight="SemiBold"/>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Jobs}" DisplayMemberPath="Id" Margin="0 0 0 0"/>
     </Grid>
 </UserControl>
