@@ -9,16 +9,17 @@
     <UserControl.Resources>
         <Style TargetType="GridViewColumnHeader">
             <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" />
-        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}">
+        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="100"/>
