@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
 using Copier.Models;
+using System.Diagnostics;
 
 namespace Copier.ViewModels
 {
@@ -32,6 +34,12 @@ namespace Copier.ViewModels
         private void MessageReceived(CopyJobSavedMessage message)
         {
             Jobs = message.Value;
+        }
+
+        [RelayCommand]
+        public void SetCurrentJob(CopyJob thing)
+        {
+            Debug.WriteLine(thing.Id);
         }
     }
 }
