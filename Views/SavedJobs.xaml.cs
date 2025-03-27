@@ -2,9 +2,9 @@
 
 namespace Copier.Views
 {
-    public partial class Sidebar : UserControl
+    public partial class SavedJobs : UserControl
     {
-        public Sidebar()
+        public SavedJobs()
         {
             InitializeComponent();
         }

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Copier.ViewModels
 {
-    public partial class SidebarViewModel : ObservableObject
+    public partial class SavedJobsViewModel : ObservableObject
     {
         private readonly IMessenger Messenger;
         private readonly IFileCopyManager FileCopyManager;
@@ -15,7 +15,7 @@ namespace Copier.ViewModels
         [ObservableProperty]
         public List<IJob<CopyJobConfig>> jobs = [];
 
-        public SidebarViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
+        public SavedJobsViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             Messenger = messenger;
             FileCopyManager = fileCopyManager;
@@ -25,7 +25,7 @@ namespace Copier.ViewModels
 
         private void InitMessenger()
         {
-            Messenger.Register<SidebarViewModel, CopyJobSavedMessage>(this, (recipient, message) =>
+            Messenger.Register<SavedJobsViewModel, CopyJobSavedMessage>(this, (recipient, message) =>
             {
                 recipient.MessageReceived(message);
             });

@@ -14,17 +14,17 @@ namespace Copier.ViewModels
         public ActionPanelViewModel actionPanelViewModel;
 
         [ObservableProperty]
-        public SidebarViewModel sidebarViewModel;
+        public SavedJobsViewModel savedJobsViewModel;
 
         [ObservableProperty]
         public TopMenuViewModel topMenuViewModel;
 
-        public MainWindowViewModel(SelectSrcFolderViewModel _selectSrcViewModel, SelectDestFolderViewModel _selectDestFolderView, ActionPanelViewModel _actionPanelViewModel, SidebarViewModel _sidebarViewModel, TopMenuViewModel _topMenuViewModel)
+        public MainWindowViewModel(SelectSrcFolderViewModel _selectSrcViewModel, SelectDestFolderViewModel _selectDestFolderView, ActionPanelViewModel _actionPanelViewModel, SavedJobsViewModel _savedJobsViewModel, TopMenuViewModel _topMenuViewModel)
         {
             selectSrcFolderViewModel = _selectSrcViewModel;
             selectDestFolderViewModel = _selectDestFolderView;
             actionPanelViewModel = _actionPanelViewModel;
-            sidebarViewModel = _sidebarViewModel;
+            savedJobsViewModel = _savedJobsViewModel;
             topMenuViewModel = _topMenuViewModel;
         }
     }

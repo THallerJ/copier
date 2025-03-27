@@ -25,7 +25,7 @@ namespace Copier.Factorys
                 services.AddTransient(s => CreateSelectSrcFolderViewModel(s));
                 services.AddTransient(s => CreateSelectToFolderViewModel(s));
                 services.AddTransient(s => CreateActionPanelViewModel(s));
-                services.AddTransient(s => CreateSidebarViewModel(s));
+                services.AddTransient(s => CreateSavedJobsViewModel(s));
                 services.AddTransient(s => CreateCopyJobDialogViewModel(s));
                 services.AddTransient(s => CreateTopMenuViewModel(s));
             }).Build();
@@ -48,7 +48,7 @@ namespace Copier.Factorys
             var selectFromViewModel = services.GetService<SelectSrcFolderViewModel>();
             var selectToFolderViewModel = services.GetService<SelectDestFolderViewModel>();
             var actionPanelViewModel = services.GetService<ActionPanelViewModel>();
-            var sidebarViewModel = services.GetService<SidebarViewModel>();
+            var sidebarViewModel = services.GetService<SavedJobsViewModel>();
             var topMenuViewModel = services.GetService<TopMenuViewModel>();
 
             if (selectFromViewModel == null || selectToFolderViewModel == null || actionPanelViewModel == null || sidebarViewModel == null || topMenuViewModel == null)
@@ -105,7 +105,7 @@ namespace Copier.Factorys
             return new ActionPanelViewModel(fileExplorer, messenger, dialogFactory, copyJobDialogViewModel);
         }
 
-        private static SidebarViewModel CreateSidebarViewModel(IServiceProvider services)
+        private static SavedJobsViewModel CreateSavedJobsViewModel(IServiceProvider services)
         {
             var messenger = services.GetService<IMessenger>();
             var fileCopyManager = services.GetService<IFileCopyManager>();
@@ -115,7 +115,7 @@ namespace Copier.Factorys
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new SidebarViewModel(fileCopyManager, messenger);
+            return new SavedJobsViewModel(fileCopyManager, messenger);
         }
 
         private static CopyJobDialogViewModel CreateCopyJobDialogViewModel(IServiceProvider services)
