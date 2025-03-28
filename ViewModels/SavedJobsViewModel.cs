@@ -15,10 +15,6 @@ namespace Copier.ViewModels
         [ObservableProperty]
         public List<IJob<CopyJobConfig>> jobs = [];
 
-
-        [ObservableProperty]
-        private CopyJob? selectedJob;
-
         public SavedJobsViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             Messenger = messenger;

@@ -22,16 +22,18 @@
 
         <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0" SelectedItem="{Binding SelectedJob}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0">
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete" Command="{Binding DeleteJobCommand}" CommandParameter="{Binding SelectedJob}"/>
+                    <MenuItem Header="Delete" Command="{Binding DeleteJobCommand}" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
+                                Path=PlacementTarget.SelectedItem}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedJob}"/>
+                    <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListView}}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
