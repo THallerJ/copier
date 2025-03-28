@@ -15,6 +15,10 @@ namespace Copier.ViewModels
         [ObservableProperty]
         public List<IJob<CopyJobConfig>> jobs = [];
 
+
+        [ObservableProperty]
+        private CopyJob? selectedJob;
+
         public SavedJobsViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             Messenger = messenger;
@@ -37,9 +41,18 @@ namespace Copier.ViewModels
         }
 
         [RelayCommand]
-        public void SetCurrentJob(CopyJob thing)
+        public void SetCurrentJob(CopyJob job)
         {
-            Debug.WriteLine(thing.Id);
+            Debug.WriteLine("set " + job.Id);
+        }
+
+        [RelayCommand]
+        public void DeleteJob(CopyJob job)
+        {
+            if (job != null)
+            {
+                Debug.WriteLine("Delete " + job.Id);
+            }
         }
     }
 }

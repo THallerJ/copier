@@ -13,22 +13,28 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid Background="WhiteSmoke">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
-        
-        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0">
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0" SelectedItem="{Binding SelectedJob}">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Delete" Command="{Binding DeleteJobCommand}" CommandParameter="{Binding SelectedJob}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                    <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedJob}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            
+
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="100"/>

@@ -11,6 +11,7 @@ namespace Copier.ViewModels
         public event EventHandler? OnOk;
         private readonly IFileCopyManager FileCopyManager;
         private readonly IMessenger Messenger;
+
         public CopyJobDialogViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
             FileCopyManager = fileCopyManager;
