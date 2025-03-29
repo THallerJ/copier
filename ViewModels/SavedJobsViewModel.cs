@@ -36,19 +36,22 @@ namespace Copier.ViewModels
             Jobs = message.Value;
         }
 
+        private void SendCopyJobChangedMessage(CopyJob job)
+        {
+            Messenger.Send(new CopyJobChangedMessage(job));
+        }
+
         [RelayCommand]
         public void SetCurrentJob(CopyJob job)
         {
-            Debug.WriteLine("set " + job.Id);
+            FileCopyManager.Job = job;
+            SendCopyJobChangedMessage(job);
         }
 
         [RelayCommand]
         public void DeleteJob(CopyJob job)
         {
-            if (job != null)
-            {
-                Debug.WriteLine("Delete " + job.Id);
-            }
+            Debug.WriteLine("Delete " + job.Id);
         }
     }
 }

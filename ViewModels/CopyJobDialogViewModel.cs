@@ -22,7 +22,7 @@ namespace Copier.ViewModels
         public async Task Save(string name)
         {
             var jobs = await FileCopyManager.SaveCopyJobAsync(name);
-            SendMessage(jobs);
+            SendCopyJobSavedMessage(jobs);
             OnOk?.Invoke(this, EventArgs.Empty);
         }
 
@@ -32,7 +32,7 @@ namespace Copier.ViewModels
             OnCancel?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SendMessage(List<IJob<CopyJobConfig>> jobs)
+        private void SendCopyJobSavedMessage(List<IJob<CopyJobConfig>> jobs)
         {
             Messenger.Send(new CopyJobSavedMessage(jobs));
         }

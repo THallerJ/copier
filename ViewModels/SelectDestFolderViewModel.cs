@@ -28,13 +28,27 @@ namespace Copier.ViewModels
         {
             Messenger.Register<SelectDestFolderViewModel, FilesCopiedMessage>(this, (recipient, val) =>
             {
-                recipient.MessageReceived();
+                recipient.FilesCopiedMessageReceived();
+            });
+
+            Messenger.Register<SelectDestFolderViewModel, CopyJobChangedMessage>(this, (recipient, val) =>
+            {
+                recipient.CopyJobChangedMessageReceived(val.Value);
             });
         }
 
-        private void MessageReceived()
+        private void FilesCopiedMessageReceived()
         {
             UpdateFiles();
+        }
+
+        private void CopyJobChangedMessageReceived(CopyJob job)
+        {
+            if (job.Config.Dest != null)
+            {
+                PathSelected(job.Config.Dest);
+                UpdateFiles(job.Config.Dest);
+            }
         }
     }
 }

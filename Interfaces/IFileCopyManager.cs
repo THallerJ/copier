@@ -4,7 +4,7 @@ namespace Copier.Interfaces
 {
     public interface IFileCopyManager
     {
-        public CopyJob Job { get; }
+        public CopyJob Job { get; set; }
 
         public List<IJob<CopyJobConfig>> CopyJobs { get; }
 

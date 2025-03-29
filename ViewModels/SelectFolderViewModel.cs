@@ -45,6 +45,12 @@ namespace Copier.ViewModels
             }
         }
 
+        public void UpdateFiles(string path)
+        {
+            CurrentPath = path;
+            UpdateFiles();
+        }
+
         private RelayCommand? selectFolderCommand;
 
         public IRelayCommand SelectFolderCommand => selectFolderCommand ??= new RelayCommand(SelectFolder);
@@ -58,7 +64,7 @@ namespace Copier.ViewModels
         public string? CurrentPath
         {
             get => currentPath;
-            private set => SetProperty(ref currentPath, value);
+            set => SetProperty(ref currentPath, value);
         }
 
         protected abstract void PathSelected(string path);
