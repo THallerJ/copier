@@ -147,14 +147,15 @@ namespace Copier.Factorys
 
         private static TopMenuViewModel CreateTopMenuViewModel(IServiceProvider services)
         {
-            var jsonJobFileHandler = services.GetService<IJsonJobFileHandler>();
+            var fileCopyManager = services.GetService<IFileCopyManager>();
+            var messenger = services.GetService<IMessenger>();
 
-            if (jsonJobFileHandler == null)
+            if (fileCopyManager == null || messenger == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new TopMenuViewModel(jsonJobFileHandler);
+            return new TopMenuViewModel(fileCopyManager, messenger);
         }
     }
 }

@@ -77,5 +77,11 @@ namespace Copier.Services
             CopyJobs = await JsonJobFileHandler.DeleteAsync<CopyJobConfig>(CopyJobFileName, id);
             return CopyJobs;
         }
+
+        public void Clear()
+        {
+            JsonJobFileHandler.DeleteAllData();
+            CopyJobs = [];
+        }
     }
 }

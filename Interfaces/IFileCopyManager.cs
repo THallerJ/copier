@@ -19,5 +19,7 @@ namespace Copier.Interfaces
         public void SetDestination(string path);
 
         public void SetSource(string path);
+
+        public void Clear();
     }
 }
