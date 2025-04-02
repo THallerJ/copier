@@ -9,6 +9,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:FolderButtonConverter x:Key="FolderButtonConverter"/>
+        <ControlTemplate x:Key="EmptyListTemplate" TargetType="ItemsControl">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="No files found" FontSize="16" FontWeight="Bold" Foreground="Gray"/>
+            </StackPanel>
+        </ControlTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -25,6 +30,15 @@
 
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Files}">
+                <ItemsControl.Style>
+                    <Style TargetType="ItemsControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Files.Count}" Value="0">
+                                <Setter Property="Template" Value="{StaticResource EmptyListTemplate}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
                 <ItemsControl.ItemContainerStyle>
                     <Style>
                         <Setter Property="FrameworkElement.Margin" Value="5, 1, 0, 1"/>

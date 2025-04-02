@@ -12,6 +12,12 @@
             <Setter Property="IsHitTestVisible" Value="False"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
+        <ControlTemplate x:Key="EmptyListTemplate" TargetType="ListView">
+            <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock Text="No jobs found" FontSize="16" FontWeight="Bold" Foreground="Gray" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
 
     <Grid Background="WhiteSmoke">
@@ -23,6 +29,16 @@
         <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
 
         <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0">
+            <ListView.Style>
+                <Style TargetType="ListView">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="0">
+                            <Setter Property="Template" Value="{StaticResource EmptyListTemplate}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Command="{Binding DeleteJobCommand}" 
