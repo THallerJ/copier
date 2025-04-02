@@ -1,21 +1,31 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
+using Copier.Messages;
 
 namespace Copier.ViewModels
 {
     public partial class TopMenuViewModel
     {
-        private readonly IJsonJobFileHandler JsonJobFileHandler;
+        private readonly IFileCopyManager FileCopyManager;
+        private readonly IMessenger Messenger;
 
-        public TopMenuViewModel(IJsonJobFileHandler jsonJobFileHandler)
+        public TopMenuViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
         {
-            JsonJobFileHandler = jsonJobFileHandler;
+            FileCopyManager = fileCopyManager;
+            Messenger = messenger;
         }
 
         [RelayCommand]
         public void ClearData()
         {
-            JsonJobFileHandler.DeleteAllData();
+            FileCopyManager.Clear();
+            SendClearDataMessage();
+        }
+
+        private void SendClearDataMessage()
+        {
+            Messenger.Send(new ClearDataMessage());
         }
     }
 }

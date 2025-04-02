@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
-using Copier.Models;
+using Copier.Messages;
 
 namespace Copier.ViewModels
 {

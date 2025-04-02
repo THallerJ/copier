@@ -6,23 +6,95 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Copier.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000">
     <UserControl.Resources>
-        <Style TargetType="GridViewColumnHeader">
-            <Setter Property="IsHitTestVisible" Value="False"/>
-            <Setter Property="BorderThickness" Value="0"/>
+        <Style TargetType="{x:Type Thumb}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkAlt}"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Border Background="{StaticResource DarkMain}" BorderBrush="{StaticResource DarkMain}" BorderThickness="0"/>
+                                <Border Background="{StaticResource DarkAlt}" BorderBrush="{StaticResource DarkAlt}" BorderThickness="0" Margin="0"/>
+                                <Border Background="{StaticResource DarkAlt}" Margin="0"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="IsHitTestVisible" Value="True"/>
+            <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
+            <Setter Property="Foreground" Value="{StaticResource MainText}"/>
+            <Setter Property="Margin" Value="0 0 0 10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border BorderBrush="Transparent" BorderThickness="0,0,0,0">
+                                <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Thumb x:Name="PART_HeaderGripper" Width="5" HorizontalAlignment="Right" Cursor="SizeWE"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="Foreground" Value="{StaticResource MainText}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <GridViewRowPresenter Content="{TemplateBinding Content}" Columns="{Binding Path=View.Columns, RelativeSource={RelativeSource AncestorType=ListView}}" Margin="0, 5, 0, 5"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource Accent1}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="{StaticResource DarkMain}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="EmptyListTemplate" TargetType="ListView">
+            <Grid Background="{StaticResource DarkAlt}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock Text="No Files found" FontSize="16" FontWeight="Bold" Foreground="Gray" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Background="WhiteSmoke">
+    <Grid Background="{StaticResource DarkMain}" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="407*"/>
+            <ColumnDefinition Width="394*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
+        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 2" Foreground="{StaticResource MainText}" Grid.ColumnSpan="2"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0">
+        <ListView ItemsSource="{Binding Jobs}" BorderThickness="0" Background="{StaticResource DarkAlt}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Margin="0,15,0,0" Padding="5" Grid.RowSpan="2" AlternationCount="2">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Delete" Command="{Binding DeleteJobCommand}" 
@@ -31,17 +103,28 @@
                 </ContextMenu>
             </ListView.ContextMenu>
 
+            <ListView.Style>
+                <Style TargetType="ListView">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Jobs.Count}" Value="0">
+                            <Setter Property="Template" Value="{StaticResource EmptyListTemplate}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
+                <i:EventTrigger EventName="MouseLeftButtonUp">
                     <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListView}}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="100"/>
-                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="200"/>
-                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="200"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="200"/>
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="333"/>
+                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="333"/>
                 </GridView>
             </ListView.View>
         </ListView>

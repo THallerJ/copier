@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="800">
     <StackPanel>
-        <Menu Background="LightGray">
-            <MenuItem Header="Files" >
-                <MenuItem Header="Clear data" HorizontalAlignment="Left" Command="{Binding ClearDataCommand}" />
+        <Menu Background="{StaticResource DarkMain}" Height="20">
+            <MenuItem Header="Files" Foreground="{StaticResource MainText}" Margin="0, 4, 0, 0">
+                <MenuItem Header="Clear data" HorizontalAlignment="Left" Command="{Binding ClearDataCommand}" Foreground="Black"/>
             </MenuItem>
         </Menu>
     </StackPanel>

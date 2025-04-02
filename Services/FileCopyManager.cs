@@ -59,7 +59,7 @@ namespace Copier.Services
                 return await JsonJobFileHandler.WriteAsync(CopyJobFileName, Job);
             }
 
-            return [];
+            return CopyJobs;
          }
 
         public void SetDestination(string path)
@@ -76,6 +76,12 @@ namespace Copier.Services
         {
             CopyJobs = await JsonJobFileHandler.DeleteAsync<CopyJobConfig>(CopyJobFileName, id);
             return CopyJobs;
+        }
+
+        public void Clear()
+        {
+            JsonJobFileHandler.DeleteAllData();
+            CopyJobs = [];
         }
     }
 }

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
+using Copier.Messages;
 using Copier.Models;
 
 namespace Copier.ViewModels
@@ -26,13 +27,23 @@ namespace Copier.ViewModels
         {
             Messenger.Register<SavedJobsViewModel, CopyJobSavedMessage>(this, (recipient, message) =>
             {
-                recipient.MessageReceived(message);
+                recipient.CopyJobSavedMessageReceived(message);
+            });
+
+            Messenger.Register<SavedJobsViewModel, ClearDataMessage>(this, (recipient, message) =>
+            {
+                recipient.ClearDataMessageReceived();
             });
         }
 
-        private void MessageReceived(CopyJobSavedMessage message)
+        private void CopyJobSavedMessageReceived(CopyJobSavedMessage message)
         {
             Jobs = message.Value;
+        }
+
+        private void ClearDataMessageReceived()
+        {
+            Jobs = [];
         }
 
         private void SendCopyJobChangedMessage(CopyJob job)
