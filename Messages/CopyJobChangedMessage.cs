@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
+using Copier.Models;
 
-namespace Copier.Models
+namespace Copier.Messages
 {
     class CopyJobChangedMessage : ValueChangedMessage<CopyJob>
     {

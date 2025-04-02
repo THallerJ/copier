@@ -1,4 +1,4 @@
-﻿namespace Copier.Models
+﻿namespace Copier.Messages
 {
     class FilesCopiedMessage
     {

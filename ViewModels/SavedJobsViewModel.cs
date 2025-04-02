@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
+using Copier.Messages;
 using Copier.Models;
 
 namespace Copier.ViewModels
