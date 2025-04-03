@@ -33,12 +33,12 @@ mas.microsoft.com/expression/blend/2008"
                 </Grid.ColumnDefinitions>
 
                 <views:SelectFolder DataContext="{Binding SelectSrcFolderViewModel}" />
-                <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" />
+                <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Stretch" Background="{StaticResource DarkMain}"/>
                 <views:SelectFolder Grid.Column="2" DataContext="{Binding SelectDestFolderViewModel}" />
             </Grid>
         </Grid>
 
-        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows" />
+        <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows" Background="{StaticResource DarkMain}"/>
         <views:SavedJobs Grid.Row="3" DataContext="{Binding SavedJobsViewModel}"/>
         <views:ActionPanel Grid.Row="4" DataContext="{Binding ActionPanelViewModel}"/>
     </Grid>

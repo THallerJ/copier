@@ -16,7 +16,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource DarkAlt}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="25"/>

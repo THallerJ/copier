@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Copier">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="DarkMain" Color="#2d2d2d" />
+        <SolidColorBrush x:Key="Dark" Color="#000000" />
+        <SolidColorBrush x:Key="DarkAlt" Color="#121212" />
+        <SolidColorBrush x:Key="MainText" Color="#d8d8d8" />
     </Application.Resources>
 </Application>
