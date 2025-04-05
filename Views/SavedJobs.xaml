@@ -26,6 +26,30 @@
             </Setter>
         </Style>
 
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
+            <Setter Property="Foreground" Value="{StaticResource MainText}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <GridViewRowPresenter Content="{TemplateBinding Content}" Columns="{Binding Path=View.Columns, RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="DarkRed"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="Blue"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         <ControlTemplate x:Key="EmptyListTemplate" TargetType="ListView">
             <Grid Background="{StaticResource DarkAlt}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock Text="No jobs found" FontSize="16" FontWeight="Bold" Foreground="Gray" 
@@ -43,15 +67,6 @@
         <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1" Foreground="{StaticResource MainText}"/>
 
         <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0" Background="{StaticResource DarkAlt}">
-            <ListView.Style>
-                <Style TargetType="ListView">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Items.Count, RelativeSource={RelativeSource Self}}" Value="0">
-                            <Setter Property="Template" Value="{StaticResource EmptyListTemplate}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Style>
 
             <ListView.ContextMenu>
                 <ContextMenu>
@@ -66,23 +81,6 @@
                     <i:InvokeCommandAction Command="{Binding SetCurrentJobCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListView}}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
-                    <Setter Property="Foreground" Value="{StaticResource MainText}"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="Black"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Black"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
 
             <ListView.View>
                 <GridView>
