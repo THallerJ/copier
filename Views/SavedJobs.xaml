@@ -5,30 +5,47 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:Copier.Views"
+             xmlns:converters="clr-namespace:Copier.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <converters:ColumnWidthConverter x:Key="ColumnWidthConverter"/>
         <Style TargetType="GridViewColumnHeader">
-            <Setter Property="IsHitTestVisible" Value="False"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="IsHitTestVisible" Value="True"/>
+            <Setter Property="Background" Value="{StaticResource DarkMain}"/>
+            <Setter Property="Foreground" Value="{StaticResource MainText}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border BorderBrush="Black" BorderThickness="0,0,1,0">
+                                <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Border BorderBrush="Black" BorderThickness="0,0,0,1" HorizontalAlignment="Right" Width="1"/>
+                            <Thumb x:Name="PART_HeaderGripper" Width="5" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWE" BorderBrush="Black"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
         <ControlTemplate x:Key="EmptyListTemplate" TargetType="ListView">
-            <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Background="{StaticResource DarkAlt}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock Text="No jobs found" FontSize="16" FontWeight="Bold" Foreground="Gray" 
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Background="WhiteSmoke">
+    <Grid Background="{StaticResource DarkMain}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1"/>
+        <TextBlock Text="Saved Jobs" FontSize="10" FontWeight="SemiBold" Margin="10 0 0 1" Foreground="{StaticResource MainText}"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0">
+        <ListView Grid.Row="1" ItemsSource="{Binding Jobs}" BorderThickness="0" Background="{StaticResource DarkAlt}">
             <ListView.Style>
                 <Style TargetType="ListView">
                     <Style.Triggers>
@@ -55,9 +72,9 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="100"/>
-                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="200"/>
-                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="200"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="333"/>
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="333"/>
+                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="333"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -25,7 +25,7 @@
 
         <TextBlock Grid.Row="0" Text="{Binding Title}" FontSize="25" Padding="10" VerticalAlignment="Center"/>
         <Button Grid.Row="1" Command="{Binding SelectFolderCommand}" Padding="5, 5, 0, 5" Content="{Binding CurrentPath, Converter={StaticResource FolderButtonConverter}}" 
-                 HorizontalContentAlignment="Left" FontWeight="Bold" BorderThickness="0">
+                 HorizontalContentAlignment="Left" FontWeight="Bold" BorderThickness="0" Background="{StaticResource DarkMain}" Foreground="{StaticResource MainText}">
         </Button>
 
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
