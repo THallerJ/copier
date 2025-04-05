@@ -19,8 +19,7 @@
                             <Border BorderBrush="Black" BorderThickness="0,0,1,0">
                                 <ContentPresenter Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
-                            <Border BorderBrush="Black" BorderThickness="0,0,0,1" HorizontalAlignment="Right" Width="1"/>
-                            <Thumb x:Name="PART_HeaderGripper" Width="5" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWE" BorderBrush="Black"/>
+                            <Thumb x:Name="PART_HeaderGripper" Width="5" HorizontalAlignment="Right" Cursor="SizeWE" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -68,11 +67,28 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Background" Value="{StaticResource DarkAlt}"/>
+                    <Setter Property="Foreground" Value="{StaticResource MainText}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="333"/>
-                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="333"/>
-                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="333"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Id}" Width="300"/>
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Config.Src}" Width="300"/>
+                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Config.Dest}" Width="300"/>
                 </GridView>
             </ListView.View>
         </ListView>
