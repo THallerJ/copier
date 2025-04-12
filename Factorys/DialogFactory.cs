@@ -1,39 +1,35 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using Copier.Config;
 using Copier.Interfaces;
-using Copier.ViewModels;
-using Copier.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
-namespace Copier.Factories
+namespace Copier.Factorys
 {
     public class DialogFactory : IDialogFactory
     {
-        private readonly IFileCopyManager FileCopyManager;
-        private readonly IMessenger Messenger;
-
-        public DialogFactory(IFileCopyManager fileCopyManager, IMessenger messenger)
+        private readonly IServiceProvider Services;
+        public DialogFactory(IServiceProvider services)
         {
-            FileCopyManager = fileCopyManager;
-            Messenger = messenger;
+            Services = services;
         }
 
-        public bool? ShowDialog(ISubmittableDialog T)
+        private readonly Dictionary<Type, Type> Dialogs = DialogDictionary.Dialogs;
+        public bool? ShowDialog<T>() where T : IDialog
         {
-            if (T.GetType() == typeof(CopyJobDialogViewModel))
+            if (Dialogs.TryGetValue(typeof(T), out var dialogType))
             {
-                var vm = new CopyJobDialogViewModel(FileCopyManager, Messenger);
-                var dialog = new CopyJobDialog(vm);
-                InitCloseable(dialog, vm);
-                return dialog.ShowDialog();
+                var vm = Services.GetRequiredService<T>();
+                var dialog = (Window?) Activator.CreateInstance(dialogType, vm);
+                if (dialog != null) return ShowDialogHelper(vm, dialog);
             }
 
             throw new ArgumentException("Unknown dialog type");
         }
-
-        private static void InitCloseable(Window dialog, ISubmittableDialog vm)
+        private static bool? ShowDialogHelper<T>(T vm, Window dialog) where T : IDialog
         {
             vm.OnCancel += (s, e) => CloseDialog(dialog, false);
             vm.OnOk += (s, e) => CloseDialog(dialog, true);
+            return dialog.ShowDialog();
         }
 
         private static void CloseDialog(Window dialog, bool ok)

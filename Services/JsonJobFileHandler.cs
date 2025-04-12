@@ -1,4 +1,4 @@
-﻿using Copier.Converters;
+﻿using Copier.Factorys;
 using Copier.Interfaces;
 using System.IO;
 using System.Text.Json;
@@ -24,16 +24,16 @@ namespace Copier.Services
 
         public async Task<List<IJob<T>>> ReadAsync<T>(string filename)
         {
-            return await ReadInternalAsync<T>(filename, true);
+            return await ReadAsyncHelper<T>(filename, true);
         }
 
         public List<IJob<T>> Read<T>(string filename)
         {
-            return ReadInternalAsync<T>(filename, false).GetAwaiter().GetResult();
+            return ReadAsyncHelper<T>(filename, false).GetAwaiter().GetResult();
         }
 
 
-        private async Task<List<IJob<T>>> ReadInternalAsync<T>(string filename, bool isAsync)
+        private async Task<List<IJob<T>>> ReadAsyncHelper<T>(string filename, bool isAsync)
         {
             string path = GetPath(filename);
 

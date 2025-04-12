@@ -1,0 +1,33 @@
+﻿<Window x:Class="Copier.Views.CopyProgressDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Copier.Views"
+        mc:Ignorable="d"
+        Title="Copying files.." Height="150" Width="350"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{StaticResource DarkMain}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding RunCopyJobCommand}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10, 0, 10, 0">
+            <TextBlock Text="Copying files..." Foreground="{DynamicResource MainText}" VerticalAlignment="Bottom" Margin="0, 0, 0, 5"/>
+            <ProgressBar Grid.Row="1" Height="40" Value="{Binding ProgressValue}"/>
+        </StackPanel>
+      
+        <Button Style="{DynamicResource DefaultButton}" Command="{Binding CancelCommand}" Grid.Row="2" HorizontalAlignment="Right" Width="75" Margin="0, 0, 10, 10" Content="CANCEL"/>
+    </Grid>
+</Window>

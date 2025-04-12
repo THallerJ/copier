@@ -1,8 +1,9 @@
-﻿using Copier.Interfaces;
+﻿using Copier.Converters;
+using Copier.Interfaces;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Copier.Converters
+namespace Copier.Factorys
 {
     public class JobConverterFactory : JsonConverterFactory
     {

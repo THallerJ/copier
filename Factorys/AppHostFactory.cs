@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using Copier.Factories;
 using Copier.Interfaces;
 using Copier.Services;
 using Copier.ViewModels;
@@ -28,6 +27,7 @@ namespace Copier.Factorys
                 services.AddTransient(s => CreateSavedJobsViewModel(s));
                 services.AddTransient(s => CreateCopyJobDialogViewModel(s));
                 services.AddTransient(s => CreateTopMenuViewModel(s));
+                services.AddTransient(s => CreateProgressViewModel(s));
             }).Build();
         }
 
@@ -91,18 +91,14 @@ namespace Copier.Factorys
 
         private static ActionPanelViewModel CreateActionPanelViewModel(IServiceProvider services)
         {
-            var fileExplorer = services.GetService<IFileCopyManager>();
-            var messenger = services.GetService<IMessenger>();
             var dialogFactory = services.GetService<IDialogFactory>();
-            var copyJobDialogViewModel = services.GetService<CopyJobDialogViewModel>();
-
-
-            if (fileExplorer == null || messenger == null || copyJobDialogViewModel == null || dialogFactory == null)
+ 
+            if (dialogFactory == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new ActionPanelViewModel(fileExplorer, messenger, dialogFactory, copyJobDialogViewModel);
+            return new ActionPanelViewModel(dialogFactory);
         }
 
         private static SavedJobsViewModel CreateSavedJobsViewModel(IServiceProvider services)
@@ -132,7 +128,7 @@ namespace Copier.Factorys
             return new CopyJobDialogViewModel(fileCopyManager, messenger);
         }
 
-        private static IDialogFactory CreateDialogFactory(IServiceProvider services)
+        private static CopyProgressDialogViewModel CreateProgressViewModel(IServiceProvider services)
         {
             var fileCopyManager = services.GetService<IFileCopyManager>();
             var messenger = services.GetService<IMessenger>();
@@ -142,7 +138,12 @@ namespace Copier.Factorys
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new DialogFactory(fileCopyManager, messenger);
+            return new CopyProgressDialogViewModel(fileCopyManager, messenger);
+        }
+
+        private static IDialogFactory CreateDialogFactory(IServiceProvider services)
+        {
+            return new DialogFactory(services);
         }
 
         private static TopMenuViewModel CreateTopMenuViewModel(IServiceProvider services)

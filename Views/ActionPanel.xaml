@@ -108,23 +108,14 @@
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Green3}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border1}"/>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background1}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border1}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground1}"/>
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid Background="{StaticResource DarkMain}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Column="1">
             <Button Style="{DynamicResource SaveButtonStyle}" Content="Save" Command="{Binding SaveCopyJobCommand}" HorizontalAlignment="Right" FontSize="20" Background="{StaticResource Accent3}" Width="200" FontWeight="Bold"/>
             <Button Style="{DynamicResource RunButtonStyle}" Content="Run" Command="{Binding CopyFilesCommand}" Background="{StaticResource Green1}" HorizontalAlignment="Right" FontSize="20" Grid.Column="1" Width="200" FontWeight="Bold"/>

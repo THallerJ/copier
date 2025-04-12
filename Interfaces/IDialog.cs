@@ -1,6 +1,6 @@
 ﻿namespace Copier.Interfaces
 {
-    public interface ISubmittableDialog
+    public interface IDialog
     {
         public event EventHandler? OnCancel;
 

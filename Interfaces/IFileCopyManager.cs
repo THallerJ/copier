@@ -8,9 +8,9 @@ namespace Copier.Interfaces
 
         public List<IJob<CopyJobConfig>> CopyJobs { get; }
 
-        public void RunCopyJob();
+        public void RunCopyJob(IProgress<float> progress, CancellationToken cancellationToken);
 
-        public void RunCopyJob(string SrcPath, string DestPath);
+        public void RunCopyJob(string SrcPath, string DestPath, IProgress<float> progress, CancellationToken cancellationToken);
 
         public Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string name);
 

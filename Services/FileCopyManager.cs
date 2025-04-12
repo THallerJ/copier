@@ -25,29 +25,36 @@ namespace Copier.Services
             return new FileCopyManager(jsonJobHandler, initialCopyJobs);
         }
 
-        public void RunCopyJob()
+        public void RunCopyJob(IProgress<float> progress, CancellationToken cancellationToken)
         {
             if (Job.Config.Src != null && Job.Config.Dest != null)
-                RunCopyJob(Job.Config.Src, Job.Config.Dest);
+                RunCopyJob(Job.Config.Src, Job.Config.Dest, progress, cancellationToken);
         }
 
-        public void RunCopyJob(string srcPath, string destPath)
+        public void RunCopyJob(string srcPath, string destPath, IProgress<float> progress, CancellationToken cancellationToken)
         {
-            foreach (string filePath in Directory.GetFiles(srcPath))
-            {
-                string copiedFile = Path.Combine(destPath, Path.GetFileName(filePath));
+            var files = Directory.EnumerateFiles(srcPath, "*", SearchOption.AllDirectories);
 
-                if (!File.Exists(copiedFile))
+            int fileCount = files.Count();
+            int fileIndex = 0;
+
+            foreach (string filePath in files)
+            {
+                if (cancellationToken.IsCancellationRequested) return;
+
+                string relativePath = Path.GetRelativePath(srcPath, filePath);
+                string destFilePath = Path.Combine(destPath, relativePath);
+
+                var destDirPath = Path.GetDirectoryName(destFilePath);
+                if (destDirPath != null)
                 {
-                    File.Copy(filePath, copiedFile);
+                    Directory.CreateDirectory(destDirPath);
                 }
-            }
 
-            foreach (string dirPath in Directory.GetDirectories(srcPath))
-            {
-                string copiedDir = Path.Combine(destPath, Path.GetFileName(dirPath));
-                Directory.CreateDirectory(copiedDir);
-                RunCopyJob(dirPath, copiedDir);
+                File.Copy(filePath, destFilePath, true);
+
+                fileIndex++;
+                progress.Report((int)((fileIndex / (float)fileCount) * 100));
             }
         }
 

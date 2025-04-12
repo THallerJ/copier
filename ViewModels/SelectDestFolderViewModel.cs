@@ -45,7 +45,7 @@ namespace Copier.ViewModels
 
         private void CopyJobChangedMessageReceived(CopyJob job)
         {
-            if (job.Config.Dest != null)
+            if (job != null && job.Config.Dest != null)
             {
                 PathSelected(job.Config.Dest);
                 UpdateFiles(job.Config.Dest);
