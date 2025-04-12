@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Copier.Interfaces;
 using Copier.Models;
+using System.Diagnostics;
 using System.IO;
 
 namespace Copier.Services
@@ -33,22 +34,25 @@ namespace Copier.Services
 
         public void RunCopyJob(string srcPath, string destPath)
         {
-            foreach (string filePath in Directory.GetFiles(srcPath))
-            {
-                string copiedFile = Path.Combine(destPath, Path.GetFileName(filePath));
+            var files = Directory.EnumerateFiles(srcPath, "*", SearchOption.AllDirectories);
 
-                if (!File.Exists(copiedFile))
+            int fileCount = files.Count();
+            Debug.WriteLine(fileCount);
+
+            foreach (string filePath in files)
+            {
+                string relativePath = Path.GetRelativePath(srcPath, filePath);
+                string destFilePath = Path.Combine(destPath, relativePath);
+
+                var destDirPath = Path.GetDirectoryName(destFilePath);
+                if (destDirPath != null)
                 {
-                    File.Copy(filePath, copiedFile);
+                    Directory.CreateDirectory(destDirPath);
                 }
-            }
 
-            foreach (string dirPath in Directory.GetDirectories(srcPath))
-            {
-                string copiedDir = Path.Combine(destPath, Path.GetFileName(dirPath));
-                Directory.CreateDirectory(copiedDir);
-                RunCopyJob(dirPath, copiedDir);
+                File.Copy(filePath, destFilePath, true);
             }
+        
         }
 
         public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
