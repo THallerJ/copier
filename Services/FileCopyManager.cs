@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Copier.Interfaces;
 using Copier.Models;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -26,18 +27,18 @@ namespace Copier.Services
             return new FileCopyManager(jsonJobHandler, initialCopyJobs);
         }
 
-        public void RunCopyJob()
+        public void RunCopyJob(IProgress<float> progress)
         {
             if (Job.Config.Src != null && Job.Config.Dest != null)
-                RunCopyJob(Job.Config.Src, Job.Config.Dest);
+                RunCopyJob(Job.Config.Src, Job.Config.Dest, progress);
         }
 
-        public void RunCopyJob(string srcPath, string destPath)
+        public void RunCopyJob(string srcPath, string destPath, IProgress<float> progress)
         {
             var files = Directory.EnumerateFiles(srcPath, "*", SearchOption.AllDirectories);
 
             int fileCount = files.Count();
-            Debug.WriteLine(fileCount);
+            int fileIndex = 0;
 
             foreach (string filePath in files)
             {
@@ -51,8 +52,10 @@ namespace Copier.Services
                 }
 
                 File.Copy(filePath, destFilePath, true);
+
+                fileIndex++;
+                progress.Report((int)((fileIndex / (float)fileCount) * 100));
             }
-        
         }
 
         public async Task<List<IJob<CopyJobConfig>>> SaveCopyJobAsync(string id)
