@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Copier.Interfaces;
 using Copier.Models;
-using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace Copier.Services
