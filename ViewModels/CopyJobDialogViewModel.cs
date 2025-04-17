@@ -7,7 +7,7 @@ using Copier.Models;
 
 namespace Copier.ViewModels
 {
-    public partial class CopyJobDialogViewModel : ISubmittableDialog
+    public partial class CopyJobDialogViewModel : IDialog
     {
         public event EventHandler? OnCancel;
         public event EventHandler? OnOk;

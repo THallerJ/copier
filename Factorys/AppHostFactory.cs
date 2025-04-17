@@ -28,6 +28,7 @@ namespace Copier.Factorys
                 services.AddTransient(s => CreateSavedJobsViewModel(s));
                 services.AddTransient(s => CreateCopyJobDialogViewModel(s));
                 services.AddTransient(s => CreateTopMenuViewModel(s));
+                services.AddTransient(s => CreateProgressViewModel(s));
             }).Build();
         }
 
@@ -130,6 +131,11 @@ namespace Copier.Factorys
             }
 
             return new CopyJobDialogViewModel(fileCopyManager, messenger);
+        }
+
+        private static ProgressDialogViewModel CreateProgressViewModel(IServiceProvider services)
+        {
+            return new ProgressDialogViewModel();
         }
 
         private static IDialogFactory CreateDialogFactory(IServiceProvider services)

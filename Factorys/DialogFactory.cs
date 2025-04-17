@@ -17,7 +17,7 @@ namespace Copier.Factories
             Messenger = messenger;
         }
 
-        public bool? ShowDialog(ISubmittableDialog T)
+        public bool? ShowDialog(IDialog T)
         {
             if (T.GetType() == typeof(CopyJobDialogViewModel))
             {
@@ -25,12 +25,18 @@ namespace Copier.Factories
                 var dialog = new CopyJobDialog(vm);
                 InitCloseable(dialog, vm);
                 return dialog.ShowDialog();
+            } else if (T.GetType() == typeof(ProgressDialogViewModel))
+            {
+                var vm = new ProgressDialogViewModel();
+                var dialog = new ProgressDialog(vm);
+                InitCloseable(dialog, vm);
+                return dialog.ShowDialog();
             }
 
-            throw new ArgumentException("Unknown dialog type");
+                throw new ArgumentException("Unknown dialog type");
         }
 
-        private static void InitCloseable(Window dialog, ISubmittableDialog vm)
+        private static void InitCloseable(Window dialog, IDialog vm)
         {
             vm.OnCancel += (s, e) => CloseDialog(dialog, false);
             vm.OnOk += (s, e) => CloseDialog(dialog, true);
