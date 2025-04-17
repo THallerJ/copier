@@ -4,7 +4,7 @@ using Copier.ViewModels;
 using Copier.Views;
 using System.Windows;
 
-namespace Copier.Factories
+namespace Copier.Factorys
 {
     public class DialogFactory : IDialogFactory
     {
@@ -19,27 +19,21 @@ namespace Copier.Factories
 
         public bool? ShowDialog(IDialog T)
         {
-            if (T.GetType() == typeof(CopyJobDialogViewModel))
+            return T switch
             {
-                var vm = new CopyJobDialogViewModel(FileCopyManager, Messenger);
-                var dialog = new CopyJobDialog(vm);
-                InitCloseable(dialog, vm);
-                return dialog.ShowDialog();
-            } else if (T.GetType() == typeof(ProgressDialogViewModel))
-            {
-                var vm = new ProgressDialogViewModel();
-                var dialog = new ProgressDialog(vm);
-                InitCloseable(dialog, vm);
-                return dialog.ShowDialog();
-            }
-
-                throw new ArgumentException("Unknown dialog type");
+                CopyJobDialogViewModel => ShowDialogHelper(() => new CopyJobDialogViewModel(FileCopyManager, Messenger), vm => new CopyJobDialog(vm)),
+                ProgressDialogViewModel => ShowDialogHelper(() => new ProgressDialogViewModel(), vm => new ProgressDialog(vm)),
+                _ => throw new ArgumentException("Unknown dialog type")
+            };
         }
 
-        private static void InitCloseable(Window dialog, IDialog vm)
+        private static bool? ShowDialogHelper<T>(Func<T> vmFactory, Func<T, Window> dialogFactory) where T : IDialog
         {
+            var vm = vmFactory();
+            var dialog = dialogFactory(vm);
             vm.OnCancel += (s, e) => CloseDialog(dialog, false);
             vm.OnOk += (s, e) => CloseDialog(dialog, true);
+            return dialog.ShowDialog();
         }
 
         private static void CloseDialog(Window dialog, bool ok)
