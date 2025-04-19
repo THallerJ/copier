@@ -1,46 +1,32 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
-using Copier.Messages;
 
 namespace Copier.ViewModels
 {
     public partial class ActionPanelViewModel : ObservableObject
     {
-        private readonly IFileCopyManager FileCopyManager;
-        private readonly IMessenger Messenger;
         private readonly IDialogFactory DialogFactory;
         private readonly CopyJobDialogViewModel CopyJobDialogViewModel;
+        private readonly CopyProgressDialogViewModel CopyProgressDialogViewModel;
 
-        [ObservableProperty]
-        public float progressValue = 0;
-
-        public ActionPanelViewModel(IFileCopyManager fileCopyManager, IMessenger messenger, IDialogFactory dialogFactory, CopyJobDialogViewModel copyJobDialogViewModel)
+        public ActionPanelViewModel(IDialogFactory dialogFactory, CopyJobDialogViewModel copyJobDialogViewModel, CopyProgressDialogViewModel copyProgressDialogViewModel)
         {
-            FileCopyManager = fileCopyManager;
-            Messenger = messenger;
             DialogFactory = dialogFactory;
             CopyJobDialogViewModel = copyJobDialogViewModel;
+            CopyProgressDialogViewModel = copyProgressDialogViewModel;
         }
 
         [RelayCommand]
-        public async Task CopyFiles()
+        public void CopyFiles()
         {
-            var progress = new Progress<float>(value => ProgressValue = value);
-            await Task.Run(() =>FileCopyManager.RunCopyJob(progress));
-            SendFilesCopiedMessage();
+            DialogFactory.ShowDialog(CopyProgressDialogViewModel);
         }
 
         [RelayCommand]
         public void SaveCopyJob()
         {
             DialogFactory.ShowDialog(CopyJobDialogViewModel);
-        }
-
-        private void SendFilesCopiedMessage()
-        {
-            Messenger.Send(new FilesCopiedMessage());
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Copier.Views
 {
     public partial class ProgressDialog : Window
     {
-        public ProgressDialog(ProgressDialogViewModel vm)
+        public ProgressDialog(CopyProgressDialogViewModel vm)
         {
             InitializeComponent();
             DataContext = vm;
