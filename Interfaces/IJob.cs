@@ -2,10 +2,10 @@
 {
     public interface IJob<T>
     {
-        public string? Id { get; set; }
+        string? Id { get; set; }
 
-        public T Config { get; }
+        T Config { get; }
 
-        public string JobType { get; }
+        string JobType { get; }
     }
 }

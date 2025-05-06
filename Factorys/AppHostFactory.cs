@@ -28,6 +28,7 @@ namespace Copier.Factorys
                 services.AddTransient(s => CreateCopyJobDialogViewModel(s));
                 services.AddTransient(s => CreateTopMenuViewModel(s));
                 services.AddTransient(s => CreateProgressViewModel(s));
+                services.AddSingleton(s => CreateShortcutManager(s));
             }).Build();
         }
 
@@ -105,13 +106,15 @@ namespace Copier.Factorys
         {
             var messenger = services.GetService<IMessenger>();
             var fileCopyManager = services.GetService<IFileCopyManager>();
+            var shortcutManager = services.GetService<IShortcutManager>();
 
-            if (messenger == null || fileCopyManager == null)
+
+            if (messenger == null || fileCopyManager == null || shortcutManager == null)
             {
                 throw new InvalidOperationException("Required services are not registered.");
             }
 
-            return new SavedJobsViewModel(fileCopyManager, messenger);
+            return new SavedJobsViewModel(fileCopyManager, messenger, shortcutManager);
         }
 
         private static CopyJobDialogViewModel CreateCopyJobDialogViewModel(IServiceProvider services)
@@ -157,6 +160,11 @@ namespace Copier.Factorys
             }
 
             return new TopMenuViewModel(fileCopyManager, messenger);
+        }
+
+        private static IShortcutManager CreateShortcutManager(IServiceProvider services)
+        {
+            return new ShortcutManager();
         }
     }
 }

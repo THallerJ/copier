@@ -2,6 +2,6 @@
 {
     public interface IDialogFactory
     {
-        public bool? ShowDialog<T>() where T : IDialog;
+        bool? ShowDialog<T>() where T : IDialog;
     }
 }

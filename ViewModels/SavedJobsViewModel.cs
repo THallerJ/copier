@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using Copier.Interfaces;
 using Copier.Messages;
 using Copier.Models;
+using Copier.Services;
+using System.Diagnostics;
 
 namespace Copier.ViewModels
 {
@@ -11,14 +13,16 @@ namespace Copier.ViewModels
     {
         private readonly IMessenger Messenger;
         private readonly IFileCopyManager FileCopyManager;
+        private readonly IShortcutManager ShortcutManager;
 
         [ObservableProperty]
         public List<IJob<CopyJobConfig>> jobs = [];
 
-        public SavedJobsViewModel(IFileCopyManager fileCopyManager, IMessenger messenger)
+        public SavedJobsViewModel(IFileCopyManager fileCopyManager, IMessenger messenger, IShortcutManager shortcutManager)
         {
             Messenger = messenger;
             FileCopyManager = fileCopyManager;
+            ShortcutManager = shortcutManager;
             Jobs = FileCopyManager.CopyJobs;
             InitMessenger();
         }
@@ -61,10 +65,17 @@ namespace Copier.ViewModels
         [RelayCommand]
         public async Task DeleteJob(CopyJob job)
         {
-            if (job.Id != null)
-            {
-                Jobs = await FileCopyManager.DeleteJobAsync(job.Id);
-            }
+            if (job.Id == null) return;
+            Jobs = await FileCopyManager.DeleteJobAsync(job.Id);
+        }
+
+        [RelayCommand]
+        public async Task CreateCopyShortcut(CopyJob job)
+        {
+            if (job == null || job.Id == null || job.Config.Src == null || job.Config.Dest == null) 
+                return;
+
+            await ShortcutManager.CreateCopyShortcut(job.Id, job.Config.Src, job.Config.Dest);            
         }
     }
 }

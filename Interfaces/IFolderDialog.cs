@@ -2,8 +2,8 @@
 {
     public interface IFolderDialog
     {
-        public string? FolderName { get; set; }
+        string? FolderName { get; set; }
 
-        public bool SelectFolder();
+        bool SelectFolder();
     }
 }

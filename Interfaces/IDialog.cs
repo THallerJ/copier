@@ -2,8 +2,8 @@
 {
     public interface IDialog
     {
-        public event EventHandler? OnCancel;
+        event EventHandler? OnCancel;
 
-        public event EventHandler? OnOk;
+        event EventHandler? OnOk;
     }
 }
