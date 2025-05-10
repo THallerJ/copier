@@ -7,6 +7,15 @@ namespace Copier.Services
 {
     public class JsonJobFileHandler : IJsonJobFileHandler
     {
+        private readonly IFileService FileService;
+        private readonly IDirectoryService DirectoryService;
+
+        public JsonJobFileHandler(IFileService fileService, IDirectoryService directoryService)
+        {
+            FileService = fileService;
+            DirectoryService = directoryService;
+
+        }
         private static readonly string DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "copier");
 
         private readonly JsonSerializerOptions Options = new JsonSerializerOptions
@@ -40,15 +49,15 @@ namespace Copier.Services
             var list = new List<IJob<T>>();
 
             string fileJson;
-            if (File.Exists(path))
+            if (FileService.Exists(path))
             {
                 if (isAsync)
                 {
-                    fileJson = await File.ReadAllTextAsync(path);
+                    fileJson = await FileService.ReadAllTextAsync(path);
                 }
                 else
                 {
-                    fileJson = File.ReadAllText(path);
+                    fileJson = FileService.ReadAllText(path);
                 }
 
                 if (!string.IsNullOrWhiteSpace(fileJson))
@@ -62,9 +71,9 @@ namespace Copier.Services
 
         public async Task<List<IJob<T>>> WriteAsync<T>(string filename, IJob<T> data)
         {
-            if (Directory.Exists(DefaultPath) == false)
+            if (DirectoryService.Exists(DefaultPath) == false)
             {
-                Directory.CreateDirectory(DefaultPath);
+                DirectoryService.CreateDirectory(DefaultPath);
             }
 
             string path = GetPath(filename);
@@ -78,20 +87,20 @@ namespace Copier.Services
 
             list.Add(data);
             var json = JsonSerializer.Serialize(list, Options);
-            await File.WriteAllTextAsync(path, json);
+            await FileService.WriteAllTextAsync(path, json);
 
             return list;
         }
 
         public void DeleteAllData()
         {
-            Directory.Delete(DefaultPath, true);
+            DirectoryService.Delete(DefaultPath, true);
         }
 
         public async Task<List<IJob<T>>> DeleteAsync<T>(string filename, string id)
         {
             var path = GetPath(filename);
-            if (File.Exists(path) == false) return [];
+            if (FileService.Exists(path) == false) return [];
 
             var list = await ReadAsync<T>(filename);
             var job = list.FirstOrDefault(item => item.Id == item.Id);
@@ -100,7 +109,7 @@ namespace Copier.Services
             {
                 list.Remove(job);
                 var json = JsonSerializer.Serialize(list, Options);
-                await File.WriteAllTextAsync(path, json);
+                await FileService.WriteAllTextAsync(path, json);
             }
 
             return list;

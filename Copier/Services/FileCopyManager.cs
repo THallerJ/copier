@@ -8,21 +8,25 @@ namespace Copier.Services
     public partial class FileCopyManager : ObservableObject, IFileCopyManager
     {
         private readonly IJsonJobFileHandler JsonJobFileHandler;
+        private readonly IFileService FileService;
+        private readonly IDirectoryService DirectoryService;
         private static readonly string CopyJobFileName = "copy_jobs";
 
         public List<IJob<CopyJobConfig>> CopyJobs { get; private set; }
         public CopyJob Job { get; set; } = new();
 
-        private FileCopyManager(IJsonJobFileHandler jsonJobFileHandler, List<IJob<CopyJobConfig>> initialCopyJobs)
+        private FileCopyManager(IJsonJobFileHandler jsonJobFileHandler, List<IJob<CopyJobConfig>> initialCopyJobs, IFileService fileService, IDirectoryService directoryService)
         {
             JsonJobFileHandler = jsonJobFileHandler;
             CopyJobs = initialCopyJobs;
+            FileService = fileService;
+            DirectoryService = directoryService;
         }
 
-        public static IFileCopyManager Create(IJsonJobFileHandler jsonJobHandler)
+        public static IFileCopyManager Create(IJsonJobFileHandler jsonJobHandler, IFileService file, IDirectoryService directory)
         {
             var initialCopyJobs = jsonJobHandler.Read<CopyJobConfig>(CopyJobFileName);
-            return new FileCopyManager(jsonJobHandler, initialCopyJobs);
+            return new FileCopyManager(jsonJobHandler, initialCopyJobs, file, directory);
         }
 
         public void RunCopyJob(IProgress<float> progress, CancellationToken cancellationToken)
@@ -33,7 +37,7 @@ namespace Copier.Services
 
         public void RunCopyJob(string srcPath, string destPath, IProgress<float> progress, CancellationToken cancellationToken)
         {
-            var files = Directory.EnumerateFiles(srcPath, "*", SearchOption.AllDirectories);
+            var files = DirectoryService.EnumerateFiles(srcPath, "*", SearchOption.AllDirectories);
 
             int fileCount = files.Count();
             int fileIndex = 0;
@@ -48,10 +52,10 @@ namespace Copier.Services
                 var destDirPath = Path.GetDirectoryName(destFilePath);
                 if (destDirPath != null)
                 {
-                    Directory.CreateDirectory(destDirPath);
+                    DirectoryService.CreateDirectory(destDirPath);
                 }
 
-                File.Copy(filePath, destFilePath, true);
+                FileService.Copy(filePath, destFilePath, true);
 
                 fileIndex++;
                 progress.Report((int)((fileIndex / (float)fileCount) * 100));

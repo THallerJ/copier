@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace Copier.Services
 {
-    class FolderDialog : IFolderDialog
+    public class FolderDialog : IFolderDialog
     {
         public string? FolderName { get; set; }
 

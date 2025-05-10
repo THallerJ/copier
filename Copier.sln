@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Copier", "Copier.csproj", "{6D48358F-3CC8-4667-9530-EE26ED654EB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Copier", "Copier\Copier.csproj", "{6D48358F-3CC8-4667-9530-EE26ED654EB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopierTests", "CopierTests\CopierTests.csproj", "{27B00253-6A5A-42C5-A4E7-59A4917F8642}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6D48358F-3CC8-4667-9530-EE26ED654EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D48358F-3CC8-4667-9530-EE26ED654EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D48358F-3CC8-4667-9530-EE26ED654EB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27B00253-6A5A-42C5-A4E7-59A4917F8642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B00253-6A5A-42C5-A4E7-59A4917F8642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B00253-6A5A-42C5-A4E7-59A4917F8642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B00253-6A5A-42C5-A4E7-59A4917F8642}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
